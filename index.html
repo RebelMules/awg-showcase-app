@@ -184,7 +184,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <label>Tags (optional)</label>
     <input type="text" id="fTags" placeholder="e.g. refrigeration, follow-up, pricing">
 
-    <button class="save-btn" id="saveBtn" onclick="saveCapture()">💾 Save</button>
+    <div style="color:var(--text2);font-size:.72rem;text-align:center;margin-top:10px">📸 Photo is always saved — fill in what you can, skip the rest</div>
+    <button class="save-btn" id="saveBtn" onclick="saveCapture()">💾 Save Capture</button>
   </div>
 </div>
 
@@ -293,91 +294,179 @@ function closeModal(){
   document.getElementById('captureModal').classList.remove('show');
 }
 
+// === IMAGE PREPROCESSING ===
+function preprocessImage(imageData){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Scale up small images
+      let w = img.width, h = img.height;
+      const minDim = 1200;
+      if(w < minDim && h < minDim){
+        const scale = minDim / Math.min(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+      
+      // Get pixel data
+      const imageDataObj = ctx.getImageData(0, 0, w, h);
+      const d = imageDataObj.data;
+      
+      // Convert to grayscale + boost contrast
+      for(let i = 0; i < d.length; i += 4){
+        // Grayscale
+        let gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+        
+        // Increase contrast (stretch histogram)
+        gray = ((gray - 128) * 1.8) + 128;
+        gray = Math.max(0, Math.min(255, gray));
+        
+        // Threshold for cleaner text (adaptive)
+        if(gray < 140) gray = 0;
+        else if(gray > 180) gray = 255;
+        
+        d[i] = d[i+1] = d[i+2] = gray;
+      }
+      
+      ctx.putImageData(imageDataObj, 0, 0);
+      
+      // Apply sharpening via unsharp mask (draw blurred version and subtract)
+      const sharp = document.createElement('canvas');
+      sharp.width = w; sharp.height = h;
+      const sctx = sharp.getContext('2d');
+      sctx.filter = 'blur(1px)';
+      sctx.drawImage(canvas, 0, 0);
+      
+      // Blend: original * 1.5 - blurred * 0.5
+      const origData = ctx.getImageData(0, 0, w, h);
+      const blurData = sctx.getImageData(0, 0, w, h);
+      for(let i = 0; i < origData.data.length; i += 4){
+        for(let c = 0; c < 3; c++){
+          const val = origData.data[i+c] * 1.5 - blurData.data[i+c] * 0.5;
+          origData.data[i+c] = Math.max(0, Math.min(255, val));
+        }
+      }
+      ctx.putImageData(origData, 0, 0);
+      
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.src = imageData;
+  });
+}
+
 // === OCR ===
 async function runOCR(imageData, type){
   const status = document.getElementById('ocrStatus');
-  status.innerHTML = '<div class="processing scanning">🔍 Reading text...</div>';
+  status.innerHTML = '<div class="processing scanning">🔍 Enhancing image & reading text...</div>';
   
   try {
+    // Preprocess image for better OCR
+    const processed = await preprocessImage(imageData);
+    
     const {createWorker} = Tesseract;
     const worker = await createWorker('eng');
-    const {data} = await worker.recognize(imageData);
+    
+    // Configure for business card text
+    await worker.setParameters({
+      tessedit_pageseg_mode: '6', // Assume uniform block of text
+      preserve_interword_spaces: '1',
+    });
+    
+    const {data} = await worker.recognize(processed);
     await worker.terminate();
     const text = data.text;
     
+    console.log('OCR raw:', text); // Debug
+    
     if(type === 'card'){
-      parseCard(text);
-      status.innerHTML = '<div class="processing done">✅ Card parsed — review below</div>';
+      parseCard(text, imageData);
+      status.innerHTML = '<div class="processing done">✅ Card parsed — review & correct below. Photo is saved either way.</div>';
     } else {
       parseFlyer(text);
-      status.innerHTML = '<div class="processing done">✅ Text extracted</div>';
+      status.innerHTML = '<div class="processing done">✅ Text extracted — review below</div>';
     }
   } catch(e){
-    status.innerHTML = '<div class="processing error">⚠️ OCR failed — fill in manually</div>';
+    console.error('OCR error:', e);
+    status.innerHTML = '<div class="processing error">⚠️ OCR struggled with this one — just fill in the important fields. Photo is saved.</div>';
   }
 }
 
-function parseCard(text){
-  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+function parseCard(text, originalImage){
+  // Clean OCR artifacts: remove isolated single chars, fix common OCR mistakes
+  const rawLines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const lines = rawLines.map(l => {
+    // Remove lines that are mostly garbage (high ratio of special chars)
+    const alphaCount = (l.match(/[a-zA-Z]/g)||[]).length;
+    const totalCount = l.replace(/\s/g,'').length;
+    if(totalCount > 0 && alphaCount / totalCount < 0.4) return ''; // mostly garbage
+    return l;
+  }).filter(Boolean);
   
-  // Email
-  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  // Also try with raw text for regex matching (emails/phones survive garbage better)
+  const allText = text + '\n' + rawLines.join('\n');
+  
+  // Email — very reliable signal
+  const emailMatch = allText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
   if(emailMatch) document.getElementById('fEmail').value = emailMatch[0].toLowerCase();
   
-  // Phone(s) — get all
-  const phones = text.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}/g) || [];
-  if(phones.length) document.getElementById('fPhone').value = phones.join(' / ');
+  // Phone(s) — get all, various formats
+  const phonePatterns = allText.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}/g) || [];
+  // Deduplicate
+  const uniquePhones = [...new Set(phonePatterns.map(p=>p.replace(/\D/g,'')))].map(digits => {
+    return phonePatterns.find(p=>p.replace(/\D/g,'')===digits);
+  });
+  if(uniquePhones.length) document.getElementById('fPhone').value = uniquePhones.join(' / ');
   
-  // Website
-  const webMatch = text.match(/(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?/g);
-  if(webMatch){
-    const site = webMatch.find(w => !w.includes('@') && w.includes('.'));
-    if(site) document.getElementById('fWeb').value = site;
+  // Website — look for .com, .net, .org patterns
+  const webPatterns = allText.match(/(?:www\.)?[a-zA-Z][a-zA-Z0-9\-]*\.(?:com|net|org|io|co|us|biz)(?:\.[a-zA-Z]{2})?/gi) || [];
+  const websites = webPatterns.filter(w => {
+    // Skip if it's part of an email
+    const emailDomain = emailMatch ? emailMatch[0].split('@')[1] : '';
+    return !emailMatch || !w.toLowerCase().includes(emailDomain.toLowerCase().split('.')[0]) || w.toLowerCase().startsWith('www');
+  });
+  if(websites.length) document.getElementById('fWeb').value = websites[0].toLowerCase();
+  // If no website found from OCR but email exists, derive it
+  if(!websites.length && emailMatch){
+    const domain = emailMatch[0].split('@')[1];
+    if(domain) document.getElementById('fWeb').value = 'www.' + domain;
   }
   
-  // Address — look for patterns with numbers + street words
-  const addrMatch = text.match(/\d+\s+[\w\s]+(?:St|Dr|Ave|Rd|Blvd|Ln|Way|Ct|Pkwy|Hwy|Suite|Ste)[\w\s.,#]*(?:\d{5})?/i);
+  // Address
+  const addrMatch = allText.match(/\d+\s+[\w\s]+(?:St|Street|Dr|Drive|Ave|Avenue|Rd|Road|Blvd|Boulevard|Ln|Lane|Way|Ct|Court|Pkwy|Parkway|Hwy|Highway|Suite|Ste|Circle|Cir|Place|Pl)[\w\s.,#\-]*?(?:\d{5}(?:-\d{4})?)?/i);
   if(addrMatch) document.getElementById('fAddress').value = addrMatch[0].replace(/\n/g, ', ').trim();
   
-  // Name — first line that looks like a person name (2-3 capitalized words, no digits)
-  const skipWords = ['phone','fax','email','tel','cell','office','mobile','address','www','http','inc','llc','corp','suite','floor'];
+  // Name — look for person names (2-3 properly capitalized words)
+  const skipWords = ['phone','fax','email','tel','cell','office','mobile','address','www','http','inc','llc','corp','suite','floor','produce','variety','world','foods','brands','company','group'];
+  let foundName = false;
   for(const line of lines){
     const clean = line.replace(/[^a-zA-Z\s.'-]/g,'').trim();
     const words = clean.split(/\s+/).filter(w=>w.length>1);
-    if(words.length >= 2 && words.length <= 4 && !line.match(/\d{3}/) && !line.includes('@') && !skipWords.some(w=>clean.toLowerCase().includes(w))){
-      // Check if words look like names (capitalized)
-      const allCapped = words.every(w => w[0] === w[0].toUpperCase());
-      if(allCapped){
+    if(words.length >= 2 && words.length <= 4 && !line.match(/\d{3}/) && !line.includes('@')){
+      const isSkip = skipWords.some(w=>clean.toLowerCase().includes(w));
+      if(isSkip) continue;
+      // Each word starts with uppercase, rest mostly lower
+      const looksLikeName = words.every(w => /^[A-Z][a-z]/.test(w) || w.length <= 3);
+      if(looksLikeName){
         document.getElementById('fName').value = clean;
-        // Next line is often title
-        const idx = lines.indexOf(line);
-        if(idx+1 < lines.length){
-          const next = lines[idx+1];
-          if(!next.includes('@') && !next.match(/\d{4}/) && next.length > 3 && next.length < 60){
-            // Is it a title or company?
-            if(/\b(manager|director|president|vp|ceo|cfo|coo|sales|marketing|regional|senior|associate|consultant|specialist|coordinator|representative|rep)\b/i.test(next)){
-              document.getElementById('fTitle').value = next;
-            } else if(!document.getElementById('fCompany').value){
-              document.getElementById('fCompany').value = next;
-            }
-          }
-        }
+        foundName = true;
         break;
       }
     }
   }
   
   // Company — line with company keywords
-  if(!document.getElementById('fCompany').value){
-    const compLine = lines.find(l => /\b(inc|llc|corp|co\b|company|group|foods|brands|solutions|enterprises|services|industries|associates|consulting|retail|wholesale)\b/i.test(l) && l !== document.getElementById('fName').value && l !== document.getElementById('fTitle').value);
-    if(compLine) document.getElementById('fCompany').value = compLine;
-  }
+  const compLine = lines.find(l => /\b(inc\.?|llc|corp|co\b|company|group|foods|brands|solutions|enterprises|services|industries|associates|consulting|retail|wholesale|produce|variety|bakery|dairy|farms)\b/i.test(l) && l !== document.getElementById('fName').value);
+  if(compLine) document.getElementById('fCompany').value = compLine.replace(/[^a-zA-Z0-9\s.,&'/-]/g,'').trim();
   
-  // Title fallback
-  if(!document.getElementById('fTitle').value){
-    const titleLine = lines.find(l => /\b(manager|director|president|vp|ceo|cfo|coo|sales|marketing|regional|senior|associate|consultant|specialist|coordinator|representative|rep|area|national|account|executive)\b/i.test(l) && l !== document.getElementById('fName').value);
-    if(titleLine) document.getElementById('fTitle').value = titleLine;
-  }
+  // Title
+  const titleLine = lines.find(l => /\b(manager|director|president|vp|vice\s*president|ceo|cfo|coo|sales|marketing|regional|senior|associate|consultant|specialist|coordinator|representative|rep|area|national|account|executive|buyer|merchandiser|broker|supervisor|lead)\b/i.test(l) && l !== document.getElementById('fName').value && l !== document.getElementById('fCompany').value);
+  if(titleLine) document.getElementById('fTitle').value = titleLine.replace(/[^a-zA-Z0-9\s.,&'/-]/g,'').trim();
 }
 
 function parseFlyer(text){
