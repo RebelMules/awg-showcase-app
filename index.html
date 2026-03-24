@@ -5,1060 +5,702 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1a1a2e">
-<title>AWG Innovation Showcase 2026</title>
+<meta name="theme-color" content="#0f0f1a">
+<title>AWG Capture</title>
 <link rel="manifest" href="manifest.json">
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;--accent:#e94560;--accent2:#0f3460;--text:#eee;--text2:#aab;--green:#00b894;--blue:#4dabf7;--border:#2a2a4a;--radius:14px}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;-webkit-tap-highlight-color:transparent}
-h1{font-size:1.3rem;font-weight:700}
-h2{font-size:1.1rem;font-weight:600;color:var(--text);margin-bottom:12px}
-h3{font-size:.95rem;font-weight:600;color:var(--blue)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-tap-highlight-color:transparent;padding-bottom:80px}
 
-/* Header */
-.header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:16px 16px 12px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.header h1{color:#fff;font-size:1.15rem}
-.header .subtitle{color:var(--text2);font-size:.75rem}
-.header .date-badge{background:var(--accent);color:#fff;font-size:.65rem;padding:3px 8px;border-radius:20px;font-weight:600}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.stat-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 8px;text-align:center}
-.stat-chip .num{display:block;font-weight:700;font-size:1rem;color:#fff}
-.stat-chip .label{display:block;font-size:.65rem;color:var(--text2);margin-top:2px}
-.quick-actions{display:flex;gap:8px;margin-top:12px}
-.quick-actions button{flex:1;border:none;border-radius:12px;padding:10px 12px;font-weight:700;font-size:.82rem;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
-.install-hint{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.25);color:#dcecff;font-size:.75rem}
+/* Header - minimal */
+.header{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.header h1{font-size:1.1rem;color:#fff}
+.header .count-badge{background:var(--accent);color:#fff;font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:700}
 
-/* Search */
-.search-wrap{padding:10px 16px;position:sticky;top:68px;z-index:99;background:var(--bg)}
-.search-wrap input{width:100%;padding:12px 16px 12px 40px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.95rem;outline:none}
-.search-wrap input:focus{border-color:var(--accent)}
-.search-wrap .icon{position:absolute;left:28px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:1.1rem}
+/* Big capture button */
+.capture-zone{padding:16px}
+.capture-btn-big{width:100%;padding:20px;border-radius:var(--radius);border:2px dashed var(--border);background:var(--card);color:var(--text);font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
+.capture-btn-big:active{transform:scale(.97);border-color:var(--accent)}
+.capture-btn-big .ico{font-size:1.8rem}
+.capture-actions{display:flex;gap:10px;margin-top:10px}
+.capture-actions button{flex:1;padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.capture-actions button:active{transform:scale(.97)}
+.capture-actions .btn-card{border-color:var(--blue);color:var(--blue)}
+.capture-actions .btn-flyer{border-color:#c084fc;color:#c084fc}
+.capture-actions .btn-note{border-color:var(--green);color:var(--green)}
 
-/* Nav tabs */
-.nav{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.nav::-webkit-scrollbar{display:none}
-.nav button{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s}
-.nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* Hidden file input */
+.hidden-input{display:none}
 
-/* Cards */
-.content{padding:0 16px}
-.card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;border:1px solid var(--border);transition:transform .15s}
-.card:active{transform:scale(.98)}
-.card .name{font-weight:600;font-size:.95rem;margin-bottom:2px}
-.card .meta{color:var(--text2);font-size:.78rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.card .meta .booth{background:var(--accent2);color:var(--blue);padding:2px 8px;border-radius:6px;font-weight:600;font-size:.72rem}
-.card .cat-tag{background:var(--card2);color:var(--text2);padding:2px 8px;border-radius:6px;font-size:.68rem;display:inline-block;margin-top:4px}
-.card .actions{display:flex;gap:8px;margin-top:10px}
-.card .actions button{flex:1;padding:8px;border-radius:10px;border:none;font-size:.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
-.btn-scan{background:#1e3a5f;color:var(--blue)}
-.btn-note{background:#1e3a2f;color:var(--green)}
-.btn-flyer{background:#3a1e3f;color:#c084fc}
-.btn-web{background:#3a2e1e;color:#fbbf24}
+/* Card list */
+.cards-list{padding:0 16px}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 8px}
+.section-header h2{font-size:.95rem;color:var(--text2)}
+.section-header .export-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:10px;font-size:.72rem;cursor:pointer}
 
-/* Category filter pills */
-.cat-filters{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:wrap}
-.cat-filters::-webkit-scrollbar{display:none}
-.cat-filters button{flex-shrink:0;padding:5px 12px;border-radius:16px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:.7rem;cursor:pointer}
-.cat-filters button.active{background:var(--accent2);color:var(--blue);border-color:var(--blue)}
-
-/* Schedule */
-.sched-day{margin-bottom:16px}
-.sched-day h3{padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:8px}
-.sched-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.sched-item .time{flex-shrink:0;width:100px;color:var(--blue);font-size:.78rem;font-weight:600}
-.sched-item .event{flex:1;font-size:.85rem}
-.sched-item .loc{color:var(--text2);font-size:.72rem}
-
-/* Scanner modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.show{display:flex}
-.modal{background:var(--card);border-radius:var(--radius);width:100%;max-width:420px;max-height:90vh;overflow-y:auto;padding:20px}
-.modal h2{margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.modal .close-btn{background:none;border:none;color:var(--text2);font-size:1.5rem;cursor:pointer;padding:4px}
-.modal label{display:block;color:var(--text2);font-size:.78rem;margin-bottom:4px;margin-top:12px}
-.modal input,.modal textarea,.modal select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;outline:none}
-.modal textarea{min-height:80px;resize:vertical}
-.modal .save-btn{width:100%;padding:12px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:16px}
-.modal .save-btn:active{opacity:.8}
-
-/* Camera */
-.camera-area{position:relative;background:#000;border-radius:10px;overflow:hidden;margin:10px 0;aspect-ratio:4/3}
-.camera-area video{width:100%;height:100%;object-fit:cover}
-.camera-area canvas{display:none}
-.capture-btn{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:60px;height:60px;border-radius:50%;border:3px solid #fff;background:rgba(233,69,96,.8);cursor:pointer}
-.capture-btn:active{background:var(--accent)}
-.captured-img{width:100%;border-radius:10px;margin:10px 0}
-
-/* Contacts log */
-.contact-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;border:1px solid var(--border)}
-.contact-card .type-badge{font-size:.65rem;padding:2px 8px;border-radius:10px;font-weight:600;display:inline-block;margin-bottom:6px}
-.type-bizcard{background:#1e3a5f;color:var(--blue)}
+.capture-card{background:var(--card);border-radius:var(--radius);margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+.capture-card .card-image{width:100%;max-height:200px;object-fit:cover;display:block}
+.capture-card .card-body{padding:12px}
+.capture-card .card-type{font-size:.65rem;padding:2px 8px;border-radius:10px;font-weight:700;display:inline-block;margin-bottom:6px}
+.type-card{background:#1e3a5f;color:var(--blue)}
 .type-flyer{background:#3a1e3f;color:#c084fc}
 .type-note{background:#1e3a2f;color:var(--green)}
-.contact-card .exhib{color:var(--text2);font-size:.75rem}
-.contact-card .detail{font-size:.85rem;margin-top:4px}
-.contact-card img{width:100%;border-radius:8px;margin-top:8px;max-height:200px;object-fit:cover}
-.contact-card .delete-btn{background:none;border:none;color:#e94560;font-size:.72rem;cursor:pointer;margin-top:6px;padding:4px 0}
+.capture-card .card-name{font-weight:700;font-size:1rem;margin-bottom:2px}
+.capture-card .card-title{color:var(--text2);font-size:.8rem;margin-bottom:4px}
+.capture-card .card-company{color:var(--blue);font-size:.85rem;font-weight:600;margin-bottom:6px}
+.capture-card .card-detail{font-size:.82rem;color:var(--text);margin:2px 0;display:flex;align-items:center;gap:6px}
+.capture-card .card-detail a{color:var(--blue);text-decoration:none}
+.capture-card .card-notes{color:var(--text2);font-size:.8rem;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.capture-card .card-time{color:var(--text2);font-size:.68rem;margin-top:6px}
+.capture-card .card-actions{display:flex;gap:8px;margin-top:8px}
+.capture-card .card-actions button{flex:1;padding:7px;border-radius:8px;border:none;font-size:.75rem;font-weight:600;cursor:pointer}
+.btn-edit{background:#1e3a5f;color:var(--blue)}
+.btn-del{background:#3a1e1e;color:var(--accent)}
 
-/* Export bar */
-.export-bar{padding:10px 16px;display:flex;gap:8px}
-.export-bar button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer}
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:flex-end;justify-content:center;padding:0}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.modal h2{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:1rem}
+.modal .close-btn{background:none;border:none;color:var(--text2);font-size:1.5rem;cursor:pointer;padding:4px}
+.modal label{display:block;color:var(--text2);font-size:.75rem;margin:10px 0 4px;font-weight:500}
+.modal input,.modal textarea,.modal select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;outline:none}
+.modal textarea{min-height:70px;resize:vertical}
+.modal .save-btn{width:100%;padding:12px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:14px}
+.modal .save-btn:active{opacity:.8}
+.modal .save-btn:disabled{opacity:.5}
+.modal .preview-img{width:100%;border-radius:10px;margin:8px 0;max-height:180px;object-fit:cover}
+
+/* Processing indicator */
+.processing{padding:10px;border-radius:10px;text-align:center;font-size:.82rem;margin:8px 0}
+.processing.scanning{background:rgba(77,171,247,.12);color:var(--blue)}
+.processing.done{background:rgba(0,184,148,.12);color:var(--green)}
+.processing.error{background:rgba(233,69,96,.12);color:var(--accent)}
+
+/* Search */
+.search-bar{padding:0 16px 8px}
+.search-bar input{width:100%;padding:10px 14px 10px 36px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem;outline:none}
+.search-bar .icon{position:absolute;left:28px;top:50%;transform:translateY(-50%);color:var(--text2)}
+.search-bar{position:relative}
+
+/* Filter tabs */
+.filter-row{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-row button{flex-shrink:0;padding:6px 14px;border-radius:16px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:.75rem;cursor:pointer;font-weight:500}
+.filter-row button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Empty */
+.empty{text-align:center;padding:50px 20px;color:var(--text2)}
+.empty .ico{font-size:3.5rem;margin-bottom:14px}
+.empty .sub{font-size:.8rem;margin-top:8px}
 
 /* Bottom nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.bottom-nav button{flex:1;padding:10px 0 8px;background:none;border:none;color:var(--text2);font-size:.65rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bottom-nav button{flex:1;padding:10px 0 6px;background:none;border:none;color:var(--text2);font-size:.62rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
 .bottom-nav button .ico{font-size:1.3rem}
 .bottom-nav button.active{color:var(--accent)}
-.bottom-nav button.active .ico{color:var(--accent)}
 
-/* Visited badge */
-.visited-badge{background:var(--green);color:#000;font-size:.6rem;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:6px}
-
-/* Empty state */
-.empty{text-align:center;padding:40px 20px;color:var(--text2)}
-.empty .ico{font-size:3rem;margin-bottom:12px}
-
-/* Count badge */
-.count{font-size:.75rem;color:var(--text2);margin-bottom:10px}
-
-/* Workshop card */
-.workshop-card{background:var(--card2);border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid var(--blue)}
-.workshop-card .time{color:var(--blue);font-size:.78rem;font-weight:600}
-.workshop-card .session{font-size:.85rem;margin:4px 0}
-.workshop-card .presenter{color:var(--text2);font-size:.75rem}
-
-.section-title{padding:6px 0 10px;font-size:.9rem;font-weight:600;color:var(--accent)}
 .hidden{display:none!important}
-
-/* Star/favorite */
-.star-btn{background:none;border:none;font-size:1.1rem;cursor:pointer;padding:2px}
-.star-btn.starred{color:#fbbf24}
-.star-btn:not(.starred){color:var(--border)}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-top">
-    <div>
-      <h1>🛒 AWG Innovation Showcase</h1>
-      <div class="subtitle">March 23-25 · Overland Park Convention Center</div>
-    </div>
-    <span class="date-badge" id="dayBadge">DAY 1</span>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-chip"><span class="num" id="statExhibitors">182</span><span class="label">Exhibitors</span></div>
-    <div class="stat-chip"><span class="num" id="statContacts">0</span><span class="label">Contacts</span></div>
-    <div class="stat-chip"><span class="num" id="statFlyers">0</span><span class="label">Flyers</span></div>
-    <div class="stat-chip"><span class="num" id="statNotes">0</span><span class="label">Notes</span></div>
-  </div>
-  <div class="quick-actions">
-    <button onclick="openScan('')">📇 Quick Card</button>
-    <button onclick="openFlyer('')">📄 Quick Flyer</button>
-  </div>
-  <div class="install-hint" id="installHint">Works offline after first load. Add to Home Screen on iPhone for the best show-floor experience.</div>
+  <h1>📸 AWG Capture</h1>
+  <span class="count-badge" id="countBadge">0 captured</span>
 </div>
 
-<!-- Search -->
-<div class="search-wrap" id="searchWrap">
+<!-- Main capture zone -->
+<div class="capture-zone" id="captureZone">
+  <div class="capture-actions">
+    <button class="btn-card" onclick="startCapture('card')">📇 Business Card</button>
+    <button class="btn-flyer" onclick="startCapture('flyer')">📄 Flyer / Doc</button>
+    <button class="btn-note" onclick="startCapture('note')">📝 Quick Note</button>
+  </div>
+</div>
+
+<!-- Search & filter -->
+<div class="search-bar" id="searchBar">
   <span class="icon">🔍</span>
-  <input type="text" id="searchInput" placeholder="Search exhibitors, booths..." autocomplete="off">
+  <input type="text" id="searchInput" placeholder="Search captures..." autocomplete="off">
+</div>
+<div class="filter-row" id="filterRow">
+  <button class="active" data-filter="all">All</button>
+  <button data-filter="card">📇 Cards</button>
+  <button data-filter="flyer">📄 Flyers</button>
+  <button data-filter="note">📝 Notes</button>
 </div>
 
-<!-- Tab navigation -->
-<div class="nav" id="mainNav">
-  <button class="active" data-tab="exhibitors">Exhibitors</button>
-  <button data-tab="schedule">Schedule</button>
-  <button data-tab="workshops">Workshops</button>
-  <button data-tab="captures">My Captures</button>
+<!-- Cards list -->
+<div class="cards-list" id="cardsList"></div>
+
+<!-- Hidden file inputs -->
+<input type="file" class="hidden-input" id="cameraInput" accept="image/*" capture="environment">
+<input type="file" class="hidden-input" id="galleryInput" accept="image/*">
+
+<!-- Capture modal (card/flyer) -->
+<div class="modal-overlay" id="captureModal">
+  <div class="modal">
+    <h2><span id="modalTitle">📇 New Card</span><button class="close-btn" onclick="closeModal()">&times;</button></h2>
+    <img class="preview-img hidden" id="previewImg">
+    <div id="ocrStatus"></div>
+    
+    <!-- Card fields -->
+    <div id="cardFields">
+      <label>Name</label>
+      <input type="text" id="fName" placeholder="Contact name">
+      <label>Title</label>
+      <input type="text" id="fTitle" placeholder="Job title">
+      <label>Company</label>
+      <input type="text" id="fCompany" placeholder="Company">
+      <label>Phone</label>
+      <input type="tel" id="fPhone" placeholder="Phone">
+      <label>Email</label>
+      <input type="email" id="fEmail" placeholder="Email">
+      <label>Address</label>
+      <input type="text" id="fAddress" placeholder="Address">
+      <label>Website</label>
+      <input type="text" id="fWeb" placeholder="Website">
+    </div>
+
+    <!-- Flyer fields -->
+    <div id="flyerFields" class="hidden">
+      <label>Title</label>
+      <input type="text" id="fFlyerTitle" placeholder="What is this?">
+      <label>Key Details</label>
+      <textarea id="fFlyerNotes" placeholder="Pricing, offers, key info..."></textarea>
+    </div>
+
+    <!-- Note fields -->
+    <div id="noteFields" class="hidden">
+      <label>Booth / Company (optional)</label>
+      <input type="text" id="fNoteBooth" placeholder="Who was this about?">
+      <label>Notes</label>
+      <textarea id="fNoteText" placeholder="What do you want to remember?" style="min-height:120px"></textarea>
+    </div>
+
+    <label>Tags (optional)</label>
+    <input type="text" id="fTags" placeholder="e.g. refrigeration, follow-up, pricing">
+
+    <button class="save-btn" id="saveBtn" onclick="saveCapture()">💾 Save</button>
+  </div>
 </div>
 
-<!-- Category filters (exhibitor tab only) -->
-<div class="cat-filters" id="catFilters">
-  <button class="active" data-cat="all">All (182)</button>
-  <button data-cat="center">Center Store</button>
-  <button data-cat="meat">Meat & Seafood</button>
-  <button data-cat="deli">Deli/Bakery/FS</button>
-  <button data-cat="produce">Produce & Floral</button>
-  <button data-cat="services">Sales & Services</button>
-  <button data-cat="design">Design & Equipment</button>
-  <button data-cat="hgs">HGS & Pharmacy</button>
-  <button data-cat="starred">⭐ Starred</button>
-</div>
-
-<div class="content" id="content"></div>
-
-<!-- Export bar for captures -->
-<div class="export-bar hidden" id="exportBar">
-  <button onclick="exportData('csv')">📄 Export CSV</button>
-  <button onclick="exportData('json')">📋 Export JSON</button>
+<!-- Edit modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h2><span>✏️ Edit</span><button class="close-btn" onclick="closeEdit()">&times;</button></h2>
+    <img class="preview-img hidden" id="editPreviewImg">
+    <div id="editFields"></div>
+    <button class="save-btn" onclick="saveEdit()">💾 Update</button>
+  </div>
 </div>
 
 <!-- Bottom nav -->
 <div class="bottom-nav">
-  <button class="active" data-tab="exhibitors"><span class="ico">🏪</span>Exhibitors</button>
-  <button data-tab="schedule"><span class="ico">📅</span>Schedule</button>
-  <button data-tab="workshops"><span class="ico">🎓</span>Learn</button>
-  <button data-tab="captures"><span class="ico">📸</span>Captures</button>
-</div>
-
-<!-- Scan Business Card Modal -->
-<div class="modal-overlay" id="scanModal">
-  <div class="modal">
-    <h2>📇 Scan Business Card <button class="close-btn" onclick="closeModal('scanModal')">&times;</button></h2>
-    <div class="camera-area" id="cardCamArea">
-      <video id="cardVideo" autoplay playsinline></video>
-      <canvas id="cardCanvas"></canvas>
-      <button class="capture-btn" id="cardCaptureBtn"></button>
-    </div>
-    <img class="captured-img hidden" id="cardPreview">
-    <label>Upload from camera roll / camera</label>
-    <input type="file" id="cardFile" accept="image/*" capture="environment">
-    <label>Name</label>
-    <input type="text" id="cardName" placeholder="Contact name">
-    <label>Company</label>
-    <input type="text" id="cardCompany" placeholder="Company">
-    <label>Phone</label>
-    <input type="tel" id="cardPhone" placeholder="Phone number">
-    <label>Email</label>
-    <input type="email" id="cardEmail" placeholder="Email">
-    <label>OCR Text</label>
-    <textarea id="cardOcrText" placeholder="OCR output will appear here for quick review"></textarea>
-    <label>Notes</label>
-    <textarea id="cardNotes" placeholder="Any notes..."></textarea>
-    <input type="hidden" id="cardExhibitor">
-    <input type="hidden" id="cardImageData">
-    <button class="save-btn" id="runOcrBtn" onclick="runCardOCR()">🔎 Run OCR</button>
-    <button class="save-btn" onclick="saveCard()">💾 Save Contact</button>
-  </div>
-</div>
-
-<!-- Flyer Scanner Modal -->
-<div class="modal-overlay" id="flyerModal">
-  <div class="modal">
-    <h2>📄 Scan Flyer <button class="close-btn" onclick="closeModal('flyerModal')">&times;</button></h2>
-    <div class="camera-area" id="flyerCamArea">
-      <video id="flyerVideo" autoplay playsinline></video>
-      <canvas id="flyerCanvas"></canvas>
-      <button class="capture-btn" id="flyerCaptureBtn"></button>
-    </div>
-    <img class="captured-img hidden" id="flyerPreview">
-    <label>Upload from camera roll / camera</label>
-    <input type="file" id="flyerFile" accept="image/*" capture="environment">
-    <label>Title / Description</label>
-    <input type="text" id="flyerTitle" placeholder="What is this?">
-    <label>Notes</label>
-    <textarea id="flyerNotes" placeholder="Key details, pricing, etc..."></textarea>
-    <input type="hidden" id="flyerExhibitor">
-    <input type="hidden" id="flyerImageData">
-    <button class="save-btn" onclick="saveFlyer()">💾 Save Flyer</button>
-  </div>
-</div>
-
-<!-- Notes Modal -->
-<div class="modal-overlay" id="noteModal">
-  <div class="modal">
-    <h2>📝 Booth Notes <button class="close-btn" onclick="closeModal('noteModal')">&times;</button></h2>
-    <div id="noteExhibName" style="color:var(--blue);font-weight:600;margin-bottom:12px"></div>
-    <label>Notes</label>
-    <textarea id="noteText" placeholder="Products discussed, pricing, follow-up items..." style="min-height:150px"></textarea>
-    <input type="hidden" id="noteExhibitor">
-    <button class="save-btn" onclick="saveNote()">💾 Save Note</button>
-  </div>
+  <button class="active" data-view="captures"><span class="ico">📸</span>Captures</button>
+  <button data-view="exhibitors"><span class="ico">🏪</span>Exhibitors</button>
+  <button data-view="schedule"><span class="ico">📅</span>Schedule</button>
 </div>
 
 <script>
-// === DATA ===
-const exhibitors = [
-  // CENTER STORE
-  {name:"AWG Brands",booth:"427",web:"awginc.com/awg-brands/",cat:"center"},
-  {name:"Brynwood Partners",booth:"411",web:"brynwoodpartners.com",cat:"center"},
-  {name:"Chobani",booth:"345",web:"chobani.com",cat:"center"},
-  {name:"CJ-Schwan's",booth:"207",web:"schwanscompany.com",cat:"center"},
-  {name:"Clorox",booth:"235",web:"clorox.com",cat:"center"},
-  {name:"Conagra Brands",booth:"317",web:"conagrabrands.com",cat:"center"},
-  {name:"Dairy Farmers of America",booth:"231",web:"dfamilk.com",cat:"center"},
-  {name:"Danone North America",booth:"201",web:"danonenorthamerica.com",cat:"center"},
-  {name:"Eagle Family Foods",booth:"233",web:"eaglefoods.com",cat:"center"},
-  {name:"Ferrero USA",booth:"206",web:"ferrero.com",cat:"center"},
-  {name:"Flora Food Group",booth:"446",web:"florafoodgroup.com",cat:"center"},
-  {name:"General Mills",booth:"307",web:"generalmills.com",cat:"center"},
-  {name:"Gold Medal Products Co.",booth:"920",web:"",cat:"center"},
-  {name:"GVH Distribution",booth:"735",web:"gvhdistribution.com",cat:"center"},
-  {name:"JM Smucker",booth:"227",web:"jmsmucker.com",cat:"center"},
-  {name:"Kellanova",booth:"311",web:"kellanovaus.com",cat:"center"},
-  {name:"Keurig Dr Pepper",booth:"419",web:"keurigdrpepper.com",cat:"center"},
-  {name:"Kimberly-Clark Corp",booth:"245",web:"kimberly-clark.com",cat:"center"},
-  {name:"Kraft Heinz",booth:"335",web:"kraftheinzcompany.com",cat:"center"},
-  {name:"Mars Wrigley",booth:"242",web:"mars.com",cat:"center"},
-  {name:"McCormick & Company",booth:"220",web:"mccormick.com",cat:"center"},
-  {name:"Milo's Tea",booth:"744",web:"drinkmilos.com",cat:"center"},
-  {name:"Mondelez International",booth:"433",web:"mondelezinternational.com",cat:"center"},
-  {name:"Nestle Purina",booth:"244",web:"purina.com",cat:"center"},
-  {name:"Nestle USA",booth:"228",web:"nestleusa.com",cat:"center"},
-  {name:"The Pictsweet Company",booth:"223",web:"pictsweetfarms.com",cat:"center"},
-  {name:"Post Consumer Brands",booth:"214",web:"postconsumerbrands.com",cat:"center"},
-  {name:"Procter & Gamble",booth:"635",web:"us.pg.com",cat:"center"},
-  {name:"Quaker Foods & Gatorade",booth:"234",web:"",cat:"center"},
-  {name:"Rana Meal Solutions",booth:"447",web:"giovanniranausa.com",cat:"center"},
-  {name:"Solaris Paper",booth:"215",web:"solarispaper.com",cat:"center"},
-  {name:"The Campbells Company",booth:"224",web:"campbells.com",cat:"center"},
-  {name:"The Hershey Company",booth:"327",web:"thehersheycompany.com",cat:"center"},
-  {name:"Tropicana Brands Group",booth:"238",web:"tropicana.com",cat:"center"},
-  {name:"Unilever",booth:"200",web:"unilever.com",cat:"center"},
-  {name:"Wells Enterprises",booth:"229",web:"wellsenterprisesinc.com",cat:"center"},
-  {name:"WK Kellogg Co",booth:"323",web:"wkkellogg.ca",cat:"center"},
-  // MEAT AND SEAFOOD
-  {name:"Beaver Street Fisheries / Sea Best",booth:"728",web:"seabest.com",cat:"meat"},
-  {name:"Butterball LLC",booth:"614",web:"butterball.com",cat:"meat"},
-  {name:"Cacique Foods",booth:"833",web:"caciquefoods.com",cat:"meat"},
-  {name:"Cargill",booth:"714",web:"cargill.com",cat:"meat"},
-  {name:"Carl Buddig And Company",booth:"835",web:"buddig.com",cat:"meat"},
-  {name:"Certified Angus Beef",booth:"837",web:"certifiedangusbeef.com",cat:"meat"},
-  {name:"High Liner Foods",booth:"624",web:"highlinerfoods.com",cat:"meat"},
-  {name:"Hormel Foods",booth:"533",web:"hormelfoods.com",cat:"meat"},
-  {name:"Iowa Smokehouse",booth:"831",web:"iowasmokehouse.com",cat:"meat"},
-  {name:"IPC Food Group",booth:"731",web:"kentuckylegend.com",cat:"meat"},
-  {name:"Land O Frost",booth:"723",web:"landofrost.com",cat:"meat"},
-  {name:"MOWI USA",booth:"628",web:"mowi.com/us/",cat:"meat"},
-  {name:"National Beef",booth:"727",web:"nationalbeef.com",cat:"meat"},
-  {name:"Prairie Fresh",booth:"724",web:"prairiefresh.com",cat:"meat"},
-  {name:"Rastelli's",booth:"719",web:"rastellifoodsgroup.com",cat:"meat"},
-  {name:"Smithfield Foods",booth:"717",web:"smithfieldfoods.com",cat:"meat"},
-  {name:"Tyson Foods",booth:"620",web:"tysonfoods.com",cat:"meat"},
-  {name:"V&V Supremo Foods",booth:"816",web:"vvsupremo.com",cat:"meat"},
-  // DELI, BAKERY, FOOD SERVICE
-  {name:"37th Street Bakery",booth:"914",web:"37bakery.com",cat:"deli"},
-  {name:"Belgioioso / Emmi Roth / Schuman Cheese",booth:"928",web:"emmiroth.com",cat:"deli"},
-  {name:"Blount Fine Foods",booth:"924",web:"blountfinefoods.com",cat:"deli"},
-  {name:"Cafe Valley Bakery",booth:"904",web:"cafevalley.com",cat:"deli"},
-  {name:"Clyde's Donuts",booth:"910",web:"clydesdonuts.com",cat:"deli"},
-  {name:"David's Cookies",booth:"906",web:"davidscookies.com",cat:"deli"},
-  {name:"Dietz & Watson",booth:"930",web:"dietzandwatson.com",cat:"deli"},
-  {name:"Give and Go Prepared Foods",booth:"902",web:"giveandgo.com",cat:"deli"},
-  {name:"Gonnella Frozen Products",booth:"916",web:"gonnella.com",cat:"deli"},
-  {name:"Gourmet Foods International",booth:"926",web:"gfifoods.com",cat:"deli"},
-  {name:"IDDBA",booth:"825",web:"iddba.org",cat:"deli"},
-  {name:"InnovAsian",booth:"827",web:"eatinnovasian.com",cat:"deli"},
-  {name:"Irresistible Foods Group",booth:"922",web:"irresistiblefoods.com",cat:"deli"},
-  {name:"JTM Foods",booth:"912",web:"jtmfoods.net",cat:"deli"},
-  {name:"Lawrence Foods",booth:"908",web:"lawrencefoods.com",cat:"deli"},
-  {name:"PFSbrands",booth:"936",web:"pfsbrands.com",cat:"deli"},
-  {name:"Picadeli",booth:"829",web:"picadeli.us",cat:"deli"},
-  {name:"Reser's Fine Foods",booth:"823",web:"resers.com",cat:"deli"},
-  {name:"Rich Products",booth:"918",web:"richs.com",cat:"deli"},
-  {name:"Rise Baking Company",booth:"900",web:"risebakingcompany.com",cat:"deli"},
-  {name:"Ventura Foods",booth:"932",web:"venturafoods.com",cat:"deli"},
-  // PRODUCE AND FLORAL
-  {name:"Avocados From Mexico",booth:"800",web:"avocadosfrommexico.com",cat:"produce"},
-  {name:"BDK Marketing",booth:"605",web:"bdkmarketing.com",cat:"produce"},
-  {name:"Bouquet Collection",booth:"605",web:"bouquetcollection.com",cat:"produce"},
-  {name:"Brightland Farms",booth:"605",web:"brightlandfarms.com",cat:"produce"},
-  {name:"Dole Fresh Fruit",booth:"606",web:"dole.com",cat:"produce"},
-  {name:"Fowler Packing Company",booth:"810",web:"fowlerpacking.com",cat:"produce"},
-  {name:"Grande Produce",booth:"511",web:"grandeproduce.com",cat:"produce"},
-  {name:"Grimmway Produce Group",booth:"515",web:"",cat:"produce"},
-  {name:"Hoffmann Heimos Greenhouse",booth:"605",web:"",cat:"produce"},
-  {name:"Honeybear Brands",booth:"700",web:"honeybearbrands.com",cat:"produce"},
-  {name:"Legacy Flowers",booth:"605",web:"legacyflowers.net",cat:"produce"},
-  {name:"Mayflower Distributing",booth:"605",web:"mayflowerdistributing.com",cat:"produce"},
-  {name:"Melissa's",booth:"—",web:"melissas.com",cat:"produce"},
-  {name:"Mountain View Fruit Sales",booth:"806",web:"mvfruit.com",cat:"produce"},
-  {name:"NatureSweet",booth:"711",web:"naturesweet.com",cat:"produce"},
-  {name:"Pacific Trellis Fruit / Dulcinea Farms",booth:"610",web:"dulcinea.com",cat:"produce"},
-  {name:"Red Sun Farms",booth:"707",web:"redsunfarms.com",cat:"produce"},
-  {name:"Sunkist Growers",booth:"407",web:"sunkist.com",cat:"produce"},
-  {name:"Taylor Farms",booth:"710",web:"taylorfarms.com",cat:"produce"},
-  {name:"The og Companies",booth:"601",web:"",cat:"produce"},
-  {name:"The Wonderful Company",booth:"812",web:"wonderful.com",cat:"produce"},
-  {name:"Westfalia Fruit",booth:"802",web:"westfaliafruit.com",cat:"produce"},
-  // STORE SALES AND SERVICES
-  {name:"AppCard",booth:"6",web:"appcard.com",cat:"services"},
-  {name:"AWG AIM",booth:"10",web:"awginc.com",cat:"services"},
-  {name:"AWG Grocer's Kart",booth:"8",web:"awginc.com",cat:"services"},
-  {name:"AWG Learning & Development",booth:"1013A",web:"awginc.com",cat:"services"},
-  {name:"AWG Partner Gateway (APG)",booth:"1013D",web:"awginc.com",cat:"services"},
-  {name:"AWG Retail Business Solutions",booth:"1013B",web:"awginc.com",cat:"services"},
-  {name:"AWG Retail Marketing Network",booth:"10",web:"awginc.com",cat:"services"},
-  {name:"AWG Shelf Merchandising",booth:"302",web:"awginc.com",cat:"services"},
-  {name:"AWG Strategic Pricing",booth:"1013C",web:"awginc.com",cat:"services"},
-  {name:"Blue Rhino Propane",booth:"116-I",web:"bluerhino.com",cat:"services"},
-  {name:"BRdata",booth:"1007",web:"brdata.com",cat:"services"},
-  {name:"Breez AI Corporation",booth:"5",web:"mybreezai.com",cat:"services"},
-  {name:"Certus / StateFoodSafety",booth:"1013B",web:"certus.com",cat:"services"},
-  {name:"Cintas",booth:"116-B",web:"cintas.com",cat:"services"},
-  {name:"Dana Industries",booth:"1005",web:"danaindustries.com",cat:"services"},
-  {name:"DCR",booth:"1022",web:"dcrpos.com",cat:"services"},
-  {name:"Denali",booth:"116-E",web:"denalicorp.com",cat:"services"},
-  {name:"DUMAC",booth:"1015",web:"dumac.com",cat:"services"},
-  {name:"ECRS",booth:"1006",web:"ecrs.com",cat:"services"},
-  {name:"eGrowcery",booth:"2",web:"egrowcery.com",cat:"services"},
-  {name:"EmpowerFresh AI",booth:"706",web:"empowerfresh.com",cat:"services"},
-  {name:"Expressions Card Kiosks",booth:"1016",web:"expressionskiosks.com",cat:"services"},
-  {name:"Fincretive",booth:"1014",web:"fincretive.com",cat:"services"},
-  {name:"Fiserv",booth:"1011",web:"fiserv.com",cat:"services"},
-  {name:"FMS Solutions",booth:"1009",web:"fmssolutions.com",cat:"services"},
-  {name:"Ford Pro",booth:"16",web:"fordpro.com",cat:"services"},
-  {name:"Grocery TV",booth:"11",web:"grocerytv.com",cat:"services"},
-  {name:"Houchens Insurance Group",booth:"1002",web:"higusa.com",cat:"services"},
-  {name:"Hudson Technologies",booth:"116-D",web:"hudsontech.com",cat:"services"},
-  {name:"IGA",booth:"13",web:"iga.com",cat:"services"},
-  {name:"Instacart",booth:"9",web:"instacart.com",cat:"services"},
-  {name:"Instacart Caper",booth:"1023-A",web:"instacart.com",cat:"services"},
-  {name:"J.W. Chatam and Associates",booth:"116-C",web:"jwchatam.com",cat:"services"},
-  {name:"Ladle",booth:"1003",web:"storewise.io",cat:"services"},
-  {name:"Loyalty Lane",booth:"4",web:"loyaltylane.com",cat:"services"},
-  {name:"National Grocers Association",booth:"12",web:"nationalgrocers.org",cat:"services"},
-  {name:"North Country",booth:"1017",web:"gonorthcountry.com",cat:"services"},
-  {name:"ODP Business Solutions",booth:"116-G",web:"odpbusiness.com",cat:"services"},
-  {name:"PAI / Brink's",booth:"116-F",web:"gopai.com",cat:"services"},
-  {name:"Pangea",booth:"1012",web:"pangea-cds.com",cat:"services"},
-  {name:"Profittrax",booth:"1004",web:"smartretailsolutions.com",cat:"services"},
-  {name:"Quad In-Store Connect",booth:"116-H",web:"quad.com",cat:"services"},
-  {name:"Republic Amusements",booth:"1023-B",web:"republicamusements.com",cat:"services"},
-  {name:"Retail Data Systems",booth:"1018",web:"rdspos.com",cat:"services"},
-  {name:"RSA America",booth:"3",web:"rsaamerica.com",cat:"services"},
-  {name:"SAS Retail Services",booth:"302",web:"",cat:"services"},
-  {name:"SBS",booth:"1017",web:"",cat:"services"},
-  {name:"Sifter",booth:"1023-C",web:"siftersolutions.com",cat:"services"},
-  {name:"Simbe",booth:"1000",web:"simberobotics.com",cat:"services"},
-  {name:"Stellantis",booth:"17",web:"stellantis.com",cat:"services"},
-  {name:"SuperFridge",booth:"301",web:"superfridge.com",cat:"services"},
-  {name:"SymphonyAI",booth:"302",web:"symphonyai.com",cat:"services"},
-  {name:"The Crossroads Program by BSR",booth:"14",web:"awgcrossroads.net",cat:"services"},
-  {name:"The Wasserstrom Company",booth:"116-K",web:"wasserstrom.com",cat:"services"},
-  {name:"TimeForge",booth:"1021",web:"timeforge.com",cat:"services"},
-  {name:"Topco Services",booth:"116",web:"topco.com",cat:"services"},
-  {name:"TRUNO",booth:"1020",web:"truno.com",cat:"services"},
-  {name:"Upside",booth:"1001",web:"upside.com",cat:"services"},
-  {name:"Vusion",booth:"1019",web:"vusion.com",cat:"services"},
-  {name:"Washburn Computer Group",booth:"116-A",web:"washburnpos.com",cat:"services"},
-  {name:"Zephyr Solutions",booth:"116-J",web:"zephyrsolutions.com",cat:"services"},
-  // STORE DESIGN & EQUIPMENT
-  {name:"AWG Store Design & Equipment",booth:"132",web:"awginc.com",cat:"design"},
-  {name:"Bargreen Ellingson",booth:"101",web:"bargreen.com",cat:"design"},
-  {name:"Bizerba",booth:"128",web:"bizerba.com",cat:"design"},
-  {name:"Blanc Display Group / Get Real Services",booth:"100",web:"blancdisplaygroup.com",cat:"design"},
-  {name:"Cox Sales & Service",booth:"123",web:"coxsales.com",cat:"design"},
-  {name:"Decorworx",booth:"133",web:"decorworx.com",cat:"design"},
-  {name:"Design Mechanical / Hillphoenix",booth:"104",web:"dmi-kc.com",cat:"design"},
-  {name:"H.A. Hammer",booth:"111",web:"hahammer.com",cat:"design"},
-  {name:"Hussmann",booth:"112",web:"hussmann.com",cat:"design"},
-  {name:"JBT Marel",booth:"125",web:"jbtc.com",cat:"design"},
-  {name:"KC Store Fixtures",booth:"127",web:"kc-store-fixtures.com",cat:"design"},
-  {name:"Lowe Rental",booth:"103",web:"lowerental.com",cat:"design"},
-  {name:"Mettler Toledo",booth:"124",web:"mt.com",cat:"design"},
-  {name:"Spina Group",booth:"131",web:"",cat:"design"},
-  {name:"Store Source Inc.",booth:"106",web:"storesourceinc.com",cat:"design"},
-  {name:"Storefront Innovations Group",booth:"110-B",web:"storefrontinnovationsgroup.com",cat:"design"},
-  {name:"Tennant Company",booth:"115",web:"tennantco.com",cat:"design"},
-  {name:"The Marco Company",booth:"129",web:"marcocompany.com",cat:"design"},
-  {name:"Zero Zone",booth:"126",web:"zero-zone.com",cat:"design"},
-  // HGS AND PHARMACY
-  {name:"Blue Buffalo",booth:"739",web:"bluebuffalo.com",cat:"hgs"},
-  {name:"HGS",booth:"737",web:"awginc.com",cat:"hgs"},
-  {name:"VMC Pharmacy",booth:"15",web:"vmcpharmacyprogram.com",cat:"hgs"}
-];
-
-const catLabels = {center:"Center Store",meat:"Meat & Seafood",deli:"Deli/Bakery/FS",produce:"Produce & Floral",services:"Sales & Services",design:"Design & Equipment",hgs:"HGS & Pharmacy"};
-
-const schedule = {
-  "Monday, March 23":[
-    {time:"7:00 AM - 6:00 PM",event:"Registration Open",loc:"Sheraton Lobby"},
-    {time:"8:00 AM - 12:00 PM",event:"Hen House Store Visits",loc:"Check-In from Sheraton Lobby"},
-    {time:"1:00 PM - 5:00 PM",event:"Educational Workshops",loc:"Sheraton"},
-    {time:"5:00 - 5:45 PM",event:"Cocktails",loc:"OPCC"},
-    {time:"5:45 - 7:45 PM",event:"Dinner & Keynote Speakers",loc:"OPCC"},
-    {time:"6:20 PM",event:"Leslie Sarasin (FMI President & CEO)",loc:"OPCC"},
-    {time:"6:45 PM",event:"Rob Riggle (Comedian/Actor)",loc:"OPCC"},
-    {time:"7:45 PM",event:"Post Dinner Entertainment",loc:"OPCC"}
-  ],
-  "Tuesday, March 24":[
-    {time:"6:00 AM - 6:00 PM",event:"Registration Open",loc:"OPCC"},
-    {time:"7:00 - 8:45 AM",event:"Vendor Breakfast (Circana)",loc:"Sheraton"},
-    {time:"7:00 - 8:00 AM",event:"Member/Employee Breakfast",loc:"OPCC"},
-    {time:"8:00 - 9:00 AM",event:"Annual Shareholders Meeting",loc:"OPCC"},
-    {time:"9:00 AM - 5:00 PM",event:"🟢 Show Floor Open",loc:"OPCC Exhibit Hall"},
-    {time:"9:30 - 11:30 AM",event:"Learning Lounges",loc:"OPCC"},
-    {time:"11:30 AM - 1:00 PM",event:"Lunch & Retailer Panel (Sally Lyons Wyatt)",loc:"OPCC"},
-    {time:"1:00 - 5:00 PM",event:"Learning Lounges",loc:"OPCC"},
-    {time:"5:00 - 5:45 PM",event:"Cocktails",loc:"OPCC"},
-    {time:"5:45 PM",event:"Dinner & Excellence Awards",loc:"OPCC"}
-  ],
-  "Wednesday, March 25":[
-    {time:"6:30 AM - 12:00 PM",event:"Registration Open",loc:"OPCC"},
-    {time:"7:00 - 7:50 AM",event:"All Attendee Breakfast",loc:"OPCC"},
-    {time:"8:00 - 9:00 AM",event:"Keynote — Jay Baer",loc:"OPCC"},
-    {time:"9:00 AM - 12:00 PM",event:"🟢 Show Floor Open",loc:"OPCC Exhibit Hall"}
-  ]
-};
-
-const workshops = {
-  "Blueberry Track — Cottonwood 2, Sheraton":[
-    {time:"1:00-1:55 PM",session:"Winning with Private Brands: AWG's Strategy for Growth",presenter:"Emily Detwiler, AWG Brands"},
-    {time:"2:00-2:25 PM",session:"Maximize Sales & Customer Reach with Expanded Assortment",presenter:"Jared Grieve, AWG"},
-    {time:"2:30-2:55 PM",session:"GLP-1 & the Evolving Consumer",presenter:"Jennifer Harris, Expert Sales"},
-    {time:"3:00-3:25 PM",session:"Driving Meat Sales in Today's Marketplace",presenter:"Heather DeLuca, AWG"},
-    {time:"3:30-3:55 PM",session:"Foodservice at Retail: Winning Strategies from AWG Operators",presenter:"Michael Pursell, AWG"},
-    {time:"4:00-4:50 PM",session:"Trends & Capturing Incremental Sales with Hispanic Shoppers",presenter:"Alatiel Barragan, AWG + panelists"}
-  ],
-  "Strawberry Track — Cottonwood 3, Sheraton":[
-    {time:"1:00-1:55 PM",session:"Modernizing Grocery: How Independent Grocers Drive Growth with Instacart",presenter:"Instacart"},
-    {time:"2:00-2:25 PM",session:"What's NEW with AWG Strategic Pricing",presenter:"Alatiel Barragan, Chris Marks, Hannah Meyer, AWG"},
-    {time:"2:30-2:55 PM",session:"Real Estate Market Research Product Offerings",presenter:"Glen Masoner, AWG"},
-    {time:"3:00-3:55 PM",session:"Financial Trends and Insights for Independent Grocers",presenter:"Jon Cline, FMS Solutions"},
-    {time:"4:00-4:55 PM",session:"AIM Act Education Workshop",presenter:"Dustin Schewe + multiple presenters"}
-  ],
-  "🍋 Lemon Lounge — Courtyard #3 (Tue)":[
-    {time:"9:30-9:55 AM",session:"Electronic Shelf Labels (ESLs) - Retailer Panel",presenter:"Chuck Korenic, RDS"},
-    {time:"10:00-10:25 AM",session:"EmpowerFresh AI - Guaranteed ROI Day 1",presenter:"Jesse Himango, EmpowerFresh"},
-    {time:"10:30-10:55 AM",session:"Cash Without Complexity: Digitizing Cash Management",presenter:"Jackie Wentz, Brink's"},
-    {time:"11:00-11:25 AM",session:"Store Ops Excellence for Whole Store Profit Optimization",presenter:"Larry Miller, Profit Trax"},
-    {time:"1:00-1:25 PM",session:"Future of Grocery Operations at the Shelf",presenter:"Justin Hillier, Vusion"},
-    {time:"1:30-1:55 PM",session:"Why Your Data Isn't Ready for AI — What to Do",presenter:"Daniel Smith, James Councill, ECRS"},
-    {time:"2:00-2:25 PM",session:"From Meal Intent to Basket Lift: AI Shopping for Independents",presenter:"Tal Zlotnitsky (Breez AI), Bill Gray (Loyalty Lane)"},
-    {time:"2:30-2:55 PM",session:"Reducing Loss & Risk: Real-Time Data Into Margin Protection",presenter:"Todd Gebski (Ladle), Wells Gunn (Houchens)"},
-    {time:"3:00-3:25 PM",session:"Payday Reimagined: Digital Pay Solutions for Grocers",presenter:"Wally Wright, Fiserv"},
-    {time:"3:30-3:55 PM",session:"2026 Tech Trends: Future of Grocery",presenter:"Jason Dilleha, DCR + panelists"},
-    {time:"4:00-4:25 PM",session:"Smarter Way to Compete: Enterprise Power for Independents",presenter:"Eran Harel, AppCard"},
-    {time:"4:30-4:55 PM",session:"Expanding Acceptance of OTC/HBC Benefit Programs",presenter:"Judd Ferrer, Fincretive"}
-  ],
-  "🍊 Orange Lounge — Courtyard #4 (Tue)":[
-    {time:"9:30-9:55 AM",session:"2026 SNAP Shoppers - What You Need to Know",presenter:"Karen Lee, Kraft Heinz"},
-    {time:"10:00-10:25 AM",session:"Attracting Health-Conscious Shoppers with Premium Products",presenter:"Joe Bradley & Kristin Kirkpatrick"},
-    {time:"10:30-10:55 AM",session:"Unlocking Food Conversion via Regional Playbooks",presenter:"Mariana Y. Eagen, P&G"},
-    {time:"11:00-11:25 AM",session:"Consumer Trends Driving Foodservice at Retail",presenter:"Ellen Hasslocher"},
-    {time:"1:00-1:25 PM",session:"Decoding Gen Z: Unlocking Next Wave of Retail Growth",presenter:"Sarah Bader, Kellanova"},
-    {time:"1:30-1:55 PM",session:"Analytical Insights to Grow Seafood Sales",presenter:"Scott Kalil, Beaver Street Fisheries"},
-    {time:"2:00-2:25 PM",session:"250 Years, One Global Stage: World Cup & America's 250th",presenter:"Miguel Trejo Macin, Ferrero"},
-    {time:"2:30-2:55 PM",session:"Role of AI in Shopping Trends and Patterns",presenter:"Kathy Risch, Unilever"},
-    {time:"3:00-3:25 PM",session:"From Data to Decisions: Leveraging AI Across Grocery",presenter:"John Abbene, BrData"},
-    {time:"3:30-3:55 PM",session:"Creating Incremental Sales Through Everyday Floral",presenter:"Randy Hanson, AWG + panelists"},
-    {time:"4:00-4:25 PM",session:"Attracting Value-Seeking Consumers",presenter:"Clint Gagel, Reese Group"},
-    {time:"4:30-4:55 PM",session:"Hispanic Produce Merchandising and Promotional Pricing",presenter:"Jesse Garcia, Grande Produce"}
-  ]
-};
-
 // === STATE ===
-let currentTab = 'exhibitors';
-let currentCat = 'all';
+let captures = JSON.parse(localStorage.getItem('awg_captures2')||'[]');
+let currentFilter = 'all';
 let searchQuery = '';
-let stars = JSON.parse(localStorage.getItem('awg_stars')||'{}');
-let captures = JSON.parse(localStorage.getItem('awg_captures')||'[]');
-let activeStream = null;
-let deferredPrompt = null;
+let currentView = 'captures';
+let captureType = 'card';
+let captureImage = '';
+let editIdx = -1;
 
-function saveCaptures(){
-  localStorage.setItem('awg_captures', JSON.stringify(captures));
+function save(){localStorage.setItem('awg_captures2',JSON.stringify(captures))}
+
+// === CAPTURE FLOW ===
+function startCapture(type){
+  captureType = type;
+  captureImage = '';
+  
+  if(type === 'note'){
+    // Notes don't need a photo
+    openModal(type, null);
+    return;
+  }
+  
+  // Trigger camera
+  const input = document.getElementById('cameraInput');
+  input.onchange = function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      captureImage = ev.target.result;
+      openModal(type, captureImage);
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  };
+  input.click();
 }
 
-function updateStats(){
-  document.getElementById('statExhibitors').textContent = exhibitors.length;
-  document.getElementById('statContacts').textContent = captures.filter(c=>c.type==='card').length;
-  document.getElementById('statFlyers').textContent = captures.filter(c=>c.type==='flyer').length;
-  document.getElementById('statNotes').textContent = captures.filter(c=>c.type==='note').length;
+function openModal(type, imageData){
+  const modal = document.getElementById('captureModal');
+  const img = document.getElementById('previewImg');
+  
+  // Reset
+  document.getElementById('cardFields').classList.toggle('hidden', type !== 'card');
+  document.getElementById('flyerFields').classList.toggle('hidden', type !== 'flyer');
+  document.getElementById('noteFields').classList.toggle('hidden', type !== 'note');
+  document.getElementById('ocrStatus').innerHTML = '';
+  document.getElementById('fTags').value = '';
+  
+  if(type === 'card'){
+    document.getElementById('modalTitle').textContent = '📇 New Business Card';
+    document.getElementById('fName').value = '';
+    document.getElementById('fTitle').value = '';
+    document.getElementById('fCompany').value = '';
+    document.getElementById('fPhone').value = '';
+    document.getElementById('fEmail').value = '';
+    document.getElementById('fAddress').value = '';
+    document.getElementById('fWeb').value = '';
+  } else if(type === 'flyer'){
+    document.getElementById('modalTitle').textContent = '📄 New Flyer';
+    document.getElementById('fFlyerTitle').value = '';
+    document.getElementById('fFlyerNotes').value = '';
+  } else {
+    document.getElementById('modalTitle').textContent = '📝 Quick Note';
+    document.getElementById('fNoteBooth').value = '';
+    document.getElementById('fNoteText').value = '';
+  }
+  
+  if(imageData){
+    img.src = imageData;
+    img.classList.remove('hidden');
+  } else {
+    img.classList.add('hidden');
+  }
+  
+  modal.classList.add('show');
+  
+  // Auto-OCR if image
+  if(imageData && (type === 'card' || type === 'flyer')){
+    runOCR(imageData, type);
+  }
 }
 
-function formatBooth(booth){
-  return booth && booth !== '—' ? `Booth ${booth}` : 'Booth TBD';
+function closeModal(){
+  document.getElementById('captureModal').classList.remove('show');
 }
 
-function formatWebsite(web){
-  return web ? web : 'No website listed';
+// === OCR ===
+async function runOCR(imageData, type){
+  const status = document.getElementById('ocrStatus');
+  status.innerHTML = '<div class="processing scanning">🔍 Reading text...</div>';
+  
+  try {
+    const {createWorker} = Tesseract;
+    const worker = await createWorker('eng');
+    const {data} = await worker.recognize(imageData);
+    await worker.terminate();
+    const text = data.text;
+    
+    if(type === 'card'){
+      parseCard(text);
+      status.innerHTML = '<div class="processing done">✅ Card parsed — review below</div>';
+    } else {
+      parseFlyer(text);
+      status.innerHTML = '<div class="processing done">✅ Text extracted</div>';
+    }
+  } catch(e){
+    status.innerHTML = '<div class="processing error">⚠️ OCR failed — fill in manually</div>';
+  }
 }
 
-function escapeHtml(value=''){
-  return String(value)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
+function parseCard(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  
+  // Email
+  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  if(emailMatch) document.getElementById('fEmail').value = emailMatch[0].toLowerCase();
+  
+  // Phone(s) — get all
+  const phones = text.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}/g) || [];
+  if(phones.length) document.getElementById('fPhone').value = phones.join(' / ');
+  
+  // Website
+  const webMatch = text.match(/(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?/g);
+  if(webMatch){
+    const site = webMatch.find(w => !w.includes('@') && w.includes('.'));
+    if(site) document.getElementById('fWeb').value = site;
+  }
+  
+  // Address — look for patterns with numbers + street words
+  const addrMatch = text.match(/\d+\s+[\w\s]+(?:St|Dr|Ave|Rd|Blvd|Ln|Way|Ct|Pkwy|Hwy|Suite|Ste)[\w\s.,#]*(?:\d{5})?/i);
+  if(addrMatch) document.getElementById('fAddress').value = addrMatch[0].replace(/\n/g, ', ').trim();
+  
+  // Name — first line that looks like a person name (2-3 capitalized words, no digits)
+  const skipWords = ['phone','fax','email','tel','cell','office','mobile','address','www','http','inc','llc','corp','suite','floor'];
+  for(const line of lines){
+    const clean = line.replace(/[^a-zA-Z\s.'-]/g,'').trim();
+    const words = clean.split(/\s+/).filter(w=>w.length>1);
+    if(words.length >= 2 && words.length <= 4 && !line.match(/\d{3}/) && !line.includes('@') && !skipWords.some(w=>clean.toLowerCase().includes(w))){
+      // Check if words look like names (capitalized)
+      const allCapped = words.every(w => w[0] === w[0].toUpperCase());
+      if(allCapped){
+        document.getElementById('fName').value = clean;
+        // Next line is often title
+        const idx = lines.indexOf(line);
+        if(idx+1 < lines.length){
+          const next = lines[idx+1];
+          if(!next.includes('@') && !next.match(/\d{4}/) && next.length > 3 && next.length < 60){
+            // Is it a title or company?
+            if(/\b(manager|director|president|vp|ceo|cfo|coo|sales|marketing|regional|senior|associate|consultant|specialist|coordinator|representative|rep)\b/i.test(next)){
+              document.getElementById('fTitle').value = next;
+            } else if(!document.getElementById('fCompany').value){
+              document.getElementById('fCompany').value = next;
+            }
+          }
+        }
+        break;
+      }
+    }
+  }
+  
+  // Company — line with company keywords
+  if(!document.getElementById('fCompany').value){
+    const compLine = lines.find(l => /\b(inc|llc|corp|co\b|company|group|foods|brands|solutions|enterprises|services|industries|associates|consulting|retail|wholesale)\b/i.test(l) && l !== document.getElementById('fName').value && l !== document.getElementById('fTitle').value);
+    if(compLine) document.getElementById('fCompany').value = compLine;
+  }
+  
+  // Title fallback
+  if(!document.getElementById('fTitle').value){
+    const titleLine = lines.find(l => /\b(manager|director|president|vp|ceo|cfo|coo|sales|marketing|regional|senior|associate|consultant|specialist|coordinator|representative|rep|area|national|account|executive)\b/i.test(l) && l !== document.getElementById('fName').value);
+    if(titleLine) document.getElementById('fTitle').value = titleLine;
+  }
 }
 
-// === DAY BADGE ===
-function updateDayBadge(){
-  const d = new Date();
-  const day = d.getDate();
-  const month = d.getMonth();
-  if(month===2 && day===23) document.getElementById('dayBadge').textContent='DAY 1 — MON';
-  else if(month===2 && day===24) document.getElementById('dayBadge').textContent='DAY 2 — TUE';
-  else if(month===2 && day===25) document.getElementById('dayBadge').textContent='DAY 3 — WED';
-  else document.getElementById('dayBadge').textContent='MAR 23-25';
+function parseFlyer(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length>3);
+  if(lines.length && !document.getElementById('fFlyerTitle').value){
+    document.getElementById('fFlyerTitle').value = lines[0];
+  }
+  document.getElementById('fFlyerNotes').value = text;
 }
-updateDayBadge();
+
+// === SAVE ===
+function saveCapture(){
+  const entry = {
+    type: captureType,
+    image: captureImage,
+    tags: document.getElementById('fTags').value,
+    ts: Date.now(),
+    date: new Date().toLocaleDateString()
+  };
+  
+  if(captureType === 'card'){
+    entry.name = document.getElementById('fName').value;
+    entry.title = document.getElementById('fTitle').value;
+    entry.company = document.getElementById('fCompany').value;
+    entry.phone = document.getElementById('fPhone').value;
+    entry.email = document.getElementById('fEmail').value;
+    entry.address = document.getElementById('fAddress').value;
+    entry.web = document.getElementById('fWeb').value;
+  } else if(captureType === 'flyer'){
+    entry.flyerTitle = document.getElementById('fFlyerTitle').value;
+    entry.notes = document.getElementById('fFlyerNotes').value;
+  } else {
+    entry.booth = document.getElementById('fNoteBooth').value;
+    entry.notes = document.getElementById('fNoteText').value;
+  }
+  
+  captures.unshift(entry); // newest first
+  save();
+  closeModal();
+  render();
+}
 
 // === RENDER ===
 function render(){
-  const c = document.getElementById('content');
-  const sf = document.getElementById('searchWrap');
-  const cf = document.getElementById('catFilters');
-  const eb = document.getElementById('exportBar');
+  document.getElementById('countBadge').textContent = captures.length + ' captured';
   
-  sf.classList.toggle('hidden', currentTab!=='exhibitors');
-  cf.classList.toggle('hidden', currentTab!=='exhibitors');
-  eb.classList.toggle('hidden', currentTab!=='captures');
-
-  if(currentTab==='exhibitors') renderExhibitors(c);
-  else if(currentTab==='schedule') renderSchedule(c);
-  else if(currentTab==='workshops') renderWorkshops(c);
-  else if(currentTab==='captures') renderCaptures(c);
-  updateStats();
+  if(currentView === 'captures') renderCaptures();
+  else if(currentView === 'exhibitors') renderExhibitors();
+  else if(currentView === 'schedule') renderSchedule();
 }
 
-function renderExhibitors(c){
-  let filtered = exhibitors;
-  if(currentCat==='starred') filtered = exhibitors.filter(e=>stars[e.name]);
-  else if(currentCat!=='all') filtered = exhibitors.filter(e=>e.cat===currentCat);
+function renderCaptures(){
+  document.getElementById('captureZone').classList.remove('hidden');
+  document.getElementById('searchBar').classList.remove('hidden');
+  document.getElementById('filterRow').classList.remove('hidden');
+  
+  const list = document.getElementById('cardsList');
+  let filtered = captures;
+  
+  if(currentFilter !== 'all') filtered = filtered.filter(c => c.type === currentFilter);
   if(searchQuery){
     const q = searchQuery.toLowerCase();
-    filtered = filtered.filter(e=>e.name.toLowerCase().includes(q)||e.booth.toLowerCase().includes(q)||e.cat.toLowerCase().includes(q));
+    filtered = filtered.filter(c => {
+      const text = [c.name,c.company,c.title,c.phone,c.email,c.booth,c.flyerTitle,c.notes,c.tags].filter(Boolean).join(' ').toLowerCase();
+      return text.includes(q);
+    });
   }
   
-  let html = `<div class="count">${filtered.length} exhibitor${filtered.length!==1?'s':''}</div>`;
-  filtered.forEach(e=>{
-    const hasCap = captures.some(cap=>cap.exhibitor===e.name);
-    html += `<div class="card">
-      <div style="display:flex;align-items:start;justify-content:space-between">
-        <div>
-          <div class="name">${e.name}${hasCap?'<span class="visited-badge">VISITED</span>':''}</div>
-          <div class="meta">
-            <span class="booth">${formatBooth(e.booth)}</span>
-            ${e.web?`<a href="https://${e.web}" target="_blank" style="color:var(--blue);font-size:.75rem;text-decoration:none">${e.web}</a>`:`<span style="font-size:.75rem;color:var(--text2)">${formatWebsite(e.web)}</span>`}
-          </div>
-          <span class="cat-tag">${catLabels[e.cat]||e.cat}</span>
-        </div>
-        <button class="star-btn ${stars[e.name]?'starred':''}" onclick="toggleStar('${e.name.replace(/'/g,"\\'")}')">★</button>
-      </div>
-      <div class="actions">
-        <button class="btn-scan" onclick="openScan('${e.name.replace(/'/g,"\\'")}')">📇 Card</button>
-        <button class="btn-flyer" onclick="openFlyer('${e.name.replace(/'/g,"\\'")}')">📄 Flyer</button>
-        <button class="btn-note" onclick="openNote('${e.name.replace(/'/g,"\\'")}')">📝 Note</button>
-        ${e.web?`<button class="btn-web" onclick="window.open('https://${e.web}','_blank')">🌐</button>`:''}
-      </div>
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty">
+      <div class="ico">${captures.length === 0 ? '📸' : '🔍'}</div>
+      ${captures.length === 0 ? 'No captures yet<div class="sub">Tap a button above to snap your first card or flyer</div>' : 'No matches'}
     </div>`;
-  });
-  if(filtered.length===0) html='<div class="empty"><div class="ico">🔍</div>No exhibitors found</div>';
-  c.innerHTML = html;
-}
-
-function renderSchedule(c){
-  let html = '';
-  for(const[day,items] of Object.entries(schedule)){
-    html += `<div class="sched-day"><h3>${day}</h3>`;
-    items.forEach(i=>{
-      const isFloor = i.event.includes('Show Floor');
-      html += `<div class="sched-item" style="${isFloor?'background:rgba(0,184,148,.08);border-radius:8px;padding:8px;margin:4px 0':''}">
-        <div class="time">${i.time}</div>
-        <div><div class="event">${i.event}</div><div class="loc">${i.loc}</div></div>
-      </div>`;
-    });
-    html += '</div>';
-  }
-  c.innerHTML = html;
-}
-
-function renderWorkshops(c){
-  let html = '';
-  for(const[track,items] of Object.entries(workshops)){
-    html += `<div class="section-title">${track}</div>`;
-    items.forEach(i=>{
-      html += `<div class="workshop-card">
-        <div class="time">${i.time}</div>
-        <div class="session">${i.session}</div>
-        <div class="presenter">${i.presenter}</div>
-      </div>`;
-    });
-  }
-  c.innerHTML = html;
-}
-
-function renderCaptures(c){
-  if(captures.length===0){
-    c.innerHTML = '<div class="empty"><div class="ico">📸</div>No captures yet<br><small style="color:var(--text2)">Scan business cards and flyers from exhibitor booths</small></div>';
     return;
   }
-  let html = `<div class="count">${captures.length} capture${captures.length!==1?'s':''}</div>`;
-  captures.slice().reverse().forEach((cap,idx)=>{
-    const realIdx = captures.length-1-idx;
-    const typeCls = cap.type==='card'?'type-bizcard':cap.type==='flyer'?'type-flyer':'type-note';
-    const typeLabel = cap.type==='card'?'📇 Business Card':cap.type==='flyer'?'📄 Flyer':'📝 Note';
-    html += `<div class="contact-card">
-      <span class="type-badge ${typeCls}">${typeLabel}</span>
-      <div class="exhib">${cap.exhibitor||'General'} · ${new Date(cap.ts).toLocaleString()}</div>`;
-    if(cap.type==='card'){
-      if(cap.name) html+=`<div class="detail"><strong>${cap.name}</strong></div>`;
-      if(cap.company) html+=`<div class="detail">${cap.company}</div>`;
-      if(cap.phone) html+=`<div class="detail">📞 <a href="tel:${cap.phone}" style="color:var(--blue)">${cap.phone}</a></div>`;
-      if(cap.email) html+=`<div class="detail">✉️ <a href="mailto:${cap.email}" style="color:var(--blue)">${cap.email}</a></div>`;
-      if(cap.notes) html+=`<div class="detail" style="color:var(--text2);margin-top:4px">${cap.notes}</div>`;
-    } else if(cap.type==='flyer'){
-      if(cap.title) html+=`<div class="detail"><strong>${cap.title}</strong></div>`;
-      if(cap.notes) html+=`<div class="detail" style="color:var(--text2)">${cap.notes}</div>`;
+  
+  let html = '';
+  filtered.forEach((c, i) => {
+    const realIdx = captures.indexOf(c);
+    html += `<div class="capture-card">`;
+    if(c.image) html += `<img class="card-image" src="${c.image}" alt="capture">`;
+    html += `<div class="card-body">`;
+    
+    if(c.type === 'card'){
+      html += `<span class="card-type type-card">📇 Business Card</span>`;
+      if(c.name) html += `<div class="card-name">${esc(c.name)}</div>`;
+      if(c.title) html += `<div class="card-title">${esc(c.title)}</div>`;
+      if(c.company) html += `<div class="card-company">${esc(c.company)}</div>`;
+      if(c.phone) html += `<div class="card-detail">📞 <a href="tel:${c.phone.split('/')[0].trim()}">${esc(c.phone)}</a></div>`;
+      if(c.email) html += `<div class="card-detail">✉️ <a href="mailto:${c.email}">${esc(c.email)}</a></div>`;
+      if(c.address) html += `<div class="card-detail">📍 ${esc(c.address)}</div>`;
+      if(c.web) html += `<div class="card-detail">🌐 <a href="https://${c.web}" target="_blank">${esc(c.web)}</a></div>`;
+    } else if(c.type === 'flyer'){
+      html += `<span class="card-type type-flyer">📄 Flyer</span>`;
+      if(c.flyerTitle) html += `<div class="card-name">${esc(c.flyerTitle)}</div>`;
+      if(c.notes) html += `<div class="card-notes">${esc(c.notes).substring(0,200)}${c.notes.length>200?'...':''}</div>`;
     } else {
-      if(cap.notes) html+=`<div class="detail">${cap.notes}</div>`;
+      html += `<span class="card-type type-note">📝 Note</span>`;
+      if(c.booth) html += `<div class="card-company">${esc(c.booth)}</div>`;
+      if(c.notes) html += `<div class="card-notes">${esc(c.notes)}</div>`;
     }
-    if(cap.image) html+=`<img src="${cap.image}" alt="capture">`;
-    html += `<button class="delete-btn" onclick="deleteCapture(${realIdx})">🗑 Delete</button></div>`;
+    
+    if(c.tags) html += `<div class="card-detail" style="margin-top:6px">🏷️ ${esc(c.tags)}</div>`;
+    html += `<div class="card-time">${new Date(c.ts).toLocaleString()}</div>`;
+    html += `<div class="card-actions">
+      <button class="btn-edit" onclick="editCapture(${realIdx})">✏️ Edit</button>
+      <button class="btn-del" onclick="deleteCapture(${realIdx})">🗑 Delete</button>
+    </div>`;
+    html += `</div></div>`;
   });
-  c.innerHTML = html;
+  
+  // Export row
+  if(filtered.length > 0){
+    html += `<div style="display:flex;gap:8px;padding:10px 0 20px">
+      <button onclick="exportData('csv')" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;cursor:pointer">📄 Export CSV</button>
+      <button onclick="exportData('json')" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;cursor:pointer">📋 Export JSON</button>
+    </div>`;
+  }
+  
+  list.innerHTML = html;
 }
 
-// === INTERACTIONS ===
-function toggleStar(name){
-  stars[name]=!stars[name];
-  if(!stars[name]) delete stars[name];
-  localStorage.setItem('awg_stars',JSON.stringify(stars));
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// === EDIT ===
+function editCapture(idx){
+  editIdx = idx;
+  const c = captures[idx];
+  const modal = document.getElementById('editModal');
+  const img = document.getElementById('editPreviewImg');
+  const fields = document.getElementById('editFields');
+  
+  if(c.image){img.src=c.image;img.classList.remove('hidden')} else img.classList.add('hidden');
+  
+  let html = '';
+  if(c.type === 'card'){
+    html += `<label>Name</label><input id="e_name" value="${esc(c.name||'')}">`;
+    html += `<label>Title</label><input id="e_title" value="${esc(c.title||'')}">`;
+    html += `<label>Company</label><input id="e_company" value="${esc(c.company||'')}">`;
+    html += `<label>Phone</label><input id="e_phone" value="${esc(c.phone||'')}">`;
+    html += `<label>Email</label><input id="e_email" value="${esc(c.email||'')}">`;
+    html += `<label>Address</label><input id="e_address" value="${esc(c.address||'')}">`;
+    html += `<label>Website</label><input id="e_web" value="${esc(c.web||'')}">`;
+  } else if(c.type === 'flyer'){
+    html += `<label>Title</label><input id="e_flyerTitle" value="${esc(c.flyerTitle||'')}">`;
+    html += `<label>Notes</label><textarea id="e_notes">${esc(c.notes||'')}</textarea>`;
+  } else {
+    html += `<label>Booth / Company</label><input id="e_booth" value="${esc(c.booth||'')}">`;
+    html += `<label>Notes</label><textarea id="e_notes">${esc(c.notes||'')}</textarea>`;
+  }
+  html += `<label>Tags</label><input id="e_tags" value="${esc(c.tags||'')}">`;
+  fields.innerHTML = html;
+  modal.classList.add('show');
+}
+
+function saveEdit(){
+  const c = captures[editIdx];
+  if(c.type === 'card'){
+    c.name = document.getElementById('e_name').value;
+    c.title = document.getElementById('e_title').value;
+    c.company = document.getElementById('e_company').value;
+    c.phone = document.getElementById('e_phone').value;
+    c.email = document.getElementById('e_email').value;
+    c.address = document.getElementById('e_address').value;
+    c.web = document.getElementById('e_web').value;
+  } else if(c.type === 'flyer'){
+    c.flyerTitle = document.getElementById('e_flyerTitle').value;
+    c.notes = document.getElementById('e_notes').value;
+  } else {
+    c.booth = document.getElementById('e_booth').value;
+    c.notes = document.getElementById('e_notes').value;
+  }
+  c.tags = document.getElementById('e_tags').value;
+  save();
+  closeEdit();
   render();
 }
+
+function closeEdit(){document.getElementById('editModal').classList.remove('show')}
 
 function deleteCapture(idx){
   if(confirm('Delete this capture?')){
     captures.splice(idx,1);
-    saveCaptures();
+    save();
     render();
   }
 }
 
-// === CAMERA ===
-async function startCamera(videoEl){
-  stopCamera();
-  try{
-    activeStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:960}},audio:false});
-    videoEl.srcObject = activeStream;
-  }catch(e){alert('Camera access needed to scan. Please allow camera permissions.')}
-}
-
-function stopCamera(){
-  if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
-}
-
-function captureFrame(videoEl,canvasEl){
-  canvasEl.width = videoEl.videoWidth;
-  canvasEl.height = videoEl.videoHeight;
-  canvasEl.getContext('2d').drawImage(videoEl,0,0);
-  return canvasEl.toDataURL('image/jpeg',0.8);
-}
-
-// === SCAN BUSINESS CARD ===
-function openScan(exhibName){
-  document.getElementById('cardExhibitor').value = exhibName;
-  document.getElementById('cardName').value='';
-  document.getElementById('cardCompany').value=exhibName;
-  document.getElementById('cardPhone').value='';
-  document.getElementById('cardEmail').value='';
-  document.getElementById('cardNotes').value='';
-  document.getElementById('cardImageData').value='';
-  document.getElementById('cardPreview').classList.add('hidden');
-  document.getElementById('cardCamArea').classList.remove('hidden');
-  document.getElementById('scanModal').classList.add('show');
-  startCamera(document.getElementById('cardVideo'));
-}
-
-function saveCard(){
-  captures.push({
-    type:'card',
-    exhibitor:document.getElementById('cardExhibitor').value,
-    name:document.getElementById('cardName').value,
-    company:document.getElementById('cardCompany').value,
-    phone:document.getElementById('cardPhone').value,
-    email:document.getElementById('cardEmail').value,
-    notes:document.getElementById('cardNotes').value,
-    image:document.getElementById('cardImageData').value,
-    ts:Date.now()
-  });
-  localStorage.setItem('awg_captures',JSON.stringify(captures));
-  closeModal('scanModal');
-  render();
-}
-
-// === FLYER SCANNER ===
-function openFlyer(exhibName){
-  document.getElementById('flyerExhibitor').value = exhibName;
-  document.getElementById('flyerTitle').value='';
-  document.getElementById('flyerNotes').value='';
-  document.getElementById('flyerImageData').value='';
-  document.getElementById('flyerPreview').classList.add('hidden');
-  document.getElementById('flyerCamArea').classList.remove('hidden');
-  document.getElementById('flyerModal').classList.add('show');
-  startCamera(document.getElementById('flyerVideo'));
-}
-
-function saveFlyer(){
-  captures.push({
-    type:'flyer',
-    exhibitor:document.getElementById('flyerExhibitor').value,
-    title:document.getElementById('flyerTitle').value,
-    notes:document.getElementById('flyerNotes').value,
-    image:document.getElementById('flyerImageData').value,
-    ts:Date.now()
-  });
-  localStorage.setItem('awg_captures',JSON.stringify(captures));
-  closeModal('flyerModal');
-  render();
-}
-
-// === NOTES ===
-function openNote(exhibName){
-  document.getElementById('noteExhibitor').value = exhibName;
-  document.getElementById('noteExhibName').textContent = exhibName;
-  const existing = captures.find(c=>c.type==='note'&&c.exhibitor===exhibName);
-  document.getElementById('noteText').value = existing?existing.notes:'';
-  document.getElementById('noteModal').classList.add('show');
-}
-
-function saveNote(){
-  const exhib = document.getElementById('noteExhibitor').value;
-  const text = document.getElementById('noteText').value;
-  if(!text.trim()){closeModal('noteModal');return}
-  const existIdx = captures.findIndex(c=>c.type==='note'&&c.exhibitor===exhib);
-  if(existIdx>=0){captures[existIdx].notes=text;captures[existIdx].ts=Date.now()}
-  else captures.push({type:'note',exhibitor:exhib,notes:text,ts:Date.now()});
-  localStorage.setItem('awg_captures',JSON.stringify(captures));
-  closeModal('noteModal');
-  render();
-}
-
-// === MODALS ===
-function closeModal(id){
-  document.getElementById(id).classList.remove('show');
-  stopCamera();
-}
-
-// Close on overlay click
-document.querySelectorAll('.modal-overlay').forEach(el=>{
-  el.addEventListener('click',e=>{if(e.target===el){closeModal(el.id)}});
-});
-
 // === EXPORT ===
 function exportData(format){
-  if(captures.length===0){alert('No captures to export');return}
-  let content,mime,ext;
+  if(!captures.length){alert('Nothing to export');return}
+  let content,ext;
   if(format==='csv'){
-    const rows=[['Type','Exhibitor','Name','Company','Phone','Email','Title','Notes','Timestamp']];
-    captures.forEach(c=>rows.push([c.type,c.exhibitor||'',c.name||'',c.company||'',c.phone||'',c.email||'',c.title||'',c.notes||'',new Date(c.ts).toISOString()]));
+    const rows=[['Type','Name','Title','Company','Phone','Email','Address','Website','Notes','Tags','Date']];
+    captures.forEach(c=>rows.push([c.type,c.name||'',c.title||'',c.company||c.booth||'',c.phone||'',c.email||'',c.address||'',c.web||'',c.notes||c.flyerTitle||'',c.tags||'',new Date(c.ts).toISOString()]));
     content=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-    mime='text/csv';ext='csv';
+    ext='csv';
   } else {
-    content=JSON.stringify(captures,null,2);
-    mime='application/json';ext='json';
+    // Strip images for cleaner export
+    const clean = captures.map(c=>{const copy={...c};delete copy.image;return copy});
+    content=JSON.stringify(clean,null,2);
+    ext='json';
   }
-  const blob=new Blob([content],{type:mime});
+  const blob=new Blob([content],{type:format==='csv'?'text/csv':'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=`awg-showcase-captures.${ext}`;
+  a.download=`awg-captures-${new Date().toISOString().slice(0,10)}.${ext}`;
   a.click();
 }
 
-// === NAV ===
-function setTab(tab){
-  currentTab=tab;
-  document.querySelectorAll('.nav button, .bottom-nav button').forEach(b=>{
-    b.classList.toggle('active',b.dataset.tab===tab);
+// === EXHIBITORS (secondary) ===
+const exhibitors = [
+  {name:"AWG Brands",booth:"427",cat:"Center Store"},{name:"Chobani",booth:"345",cat:"Center Store"},{name:"Conagra Brands",booth:"317",cat:"Center Store"},{name:"General Mills",booth:"307",cat:"Center Store"},{name:"Kraft Heinz",booth:"335",cat:"Center Store"},{name:"Kellanova",booth:"311",cat:"Center Store"},{name:"Mondelez International",booth:"433",cat:"Center Store"},{name:"Nestle USA",booth:"228",cat:"Center Store"},{name:"Procter & Gamble",booth:"635",cat:"Center Store"},{name:"Unilever",booth:"200",cat:"Center Store"},{name:"Hershey",booth:"327",cat:"Center Store"},{name:"Keurig Dr Pepper",booth:"419",cat:"Center Store"},
+  {name:"Tyson Foods",booth:"620",cat:"Meat & Seafood"},{name:"Hormel Foods",booth:"533",cat:"Meat & Seafood"},{name:"Smithfield Foods",booth:"717",cat:"Meat & Seafood"},{name:"Cargill",booth:"714",cat:"Meat & Seafood"},{name:"Certified Angus Beef",booth:"837",cat:"Meat & Seafood"},
+  {name:"PFSbrands",booth:"936",cat:"Deli/Bakery"},{name:"Rich Products",booth:"918",cat:"Deli/Bakery"},{name:"JTM Foods",booth:"912",cat:"Deli/Bakery"},
+  {name:"Taylor Farms",booth:"710",cat:"Produce"},{name:"Dole Fresh Fruit",booth:"606",cat:"Produce"},{name:"NatureSweet",booth:"711",cat:"Produce"},
+  {name:"Instacart",booth:"9",cat:"Services"},{name:"ECRS",booth:"1006",cat:"Services"},{name:"FMS Solutions",booth:"1009",cat:"Services"},{name:"Simbe",booth:"1000",cat:"Services"},{name:"Vusion",booth:"1019",cat:"Services"},{name:"BRdata",booth:"1007",cat:"Services"},{name:"AppCard",booth:"6",cat:"Services"},{name:"EmpowerFresh AI",booth:"706",cat:"Services"},
+  {name:"Hussmann",booth:"112",cat:"Equipment"},{name:"Hillphoenix",booth:"104",cat:"Equipment"},{name:"Blanc Display Group",booth:"100",cat:"Equipment"},{name:"Zero Zone",booth:"126",cat:"Equipment"}
+];
+
+function renderExhibitors(){
+  document.getElementById('captureZone').classList.add('hidden');
+  document.getElementById('filterRow').classList.add('hidden');
+  const list = document.getElementById('cardsList');
+  let filtered = exhibitors;
+  if(searchQuery){
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(e=>e.name.toLowerCase().includes(q)||e.booth.toLowerCase().includes(q));
+  }
+  let html = `<div style="padding:8px 0;color:var(--text2);font-size:.8rem">${filtered.length} exhibitors — tap to add note</div>`;
+  filtered.forEach(e=>{
+    html += `<div class="capture-card" style="cursor:pointer" onclick="quickNote('${e.name.replace(/'/g,"\\'")}')">
+      <div class="card-body" style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between">
+        <div><span style="font-weight:600;font-size:.9rem">${e.name}</span><span style="color:var(--text2);font-size:.75rem;margin-left:8px">Booth ${e.booth}</span></div>
+        <span style="color:var(--text2);font-size:.7rem">${e.cat}</span>
+      </div></div>`;
   });
-  render();
+  list.innerHTML = html;
 }
 
-document.querySelectorAll('.nav button, .bottom-nav button').forEach(b=>{
-  b.addEventListener('click',()=>setTab(b.dataset.tab));
+function quickNote(name){
+  captureType = 'note';
+  captureImage = '';
+  document.getElementById('cardFields').classList.add('hidden');
+  document.getElementById('flyerFields').classList.add('hidden');
+  document.getElementById('noteFields').classList.remove('hidden');
+  document.getElementById('modalTitle').textContent = '📝 Note — ' + name;
+  document.getElementById('fNoteBooth').value = name;
+  document.getElementById('fNoteText').value = '';
+  document.getElementById('fTags').value = '';
+  document.getElementById('previewImg').classList.add('hidden');
+  document.getElementById('ocrStatus').innerHTML = '';
+  document.getElementById('captureModal').classList.add('show');
+}
+
+// === SCHEDULE (secondary) ===
+function renderSchedule(){
+  document.getElementById('captureZone').classList.add('hidden');
+  document.getElementById('searchBar').classList.add('hidden');
+  document.getElementById('filterRow').classList.add('hidden');
+  const list = document.getElementById('cardsList');
+  const now = new Date();
+  const day = now.getDate();
+  
+  let html = '<div style="padding:8px 0">';
+  
+  // Today's highlights
+  if(day === 24){
+    html += `<div class="capture-card"><div class="card-body">
+      <div class="card-name">📅 Today — Tuesday, March 24</div>
+      <div class="card-detail">🟢 9:00 AM - 5:00 PM — Show Floor Open (Exhibit Hall)</div>
+      <div class="card-detail">🎓 9:30 - 11:30 AM — Learning Lounges</div>
+      <div class="card-detail">🍽️ 11:30 AM - 1:00 PM — Lunch & Retailer Panel</div>
+      <div class="card-detail">🎓 1:00 - 5:00 PM — Learning Lounges</div>
+      <div class="card-detail">🍸 5:00 PM — Cocktails → Dinner & Awards</div>
+    </div></div>`;
+  } else if(day === 25){
+    html += `<div class="capture-card"><div class="card-body">
+      <div class="card-name">📅 Today — Wednesday, March 25</div>
+      <div class="card-detail">🍳 7:00 AM — All Attendee Breakfast</div>
+      <div class="card-detail">🎤 8:00 AM — Keynote: Jay Baer</div>
+      <div class="card-detail">🟢 9:00 AM - 12:00 PM — Show Floor Open (LAST DAY)</div>
+    </div></div>`;
+  } else {
+    html += `<div class="capture-card"><div class="card-body">
+      <div class="card-name">📅 AWG Innovation Showcase</div>
+      <div class="card-detail">March 23-25, 2026</div>
+      <div class="card-detail">Overland Park Convention Center</div>
+    </div></div>`;
+  }
+  
+  html += '</div>';
+  list.innerHTML = html;
+}
+
+// === NAV ===
+document.querySelectorAll('.bottom-nav button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    currentView = b.dataset.view;
+    document.querySelectorAll('.bottom-nav button').forEach(x=>x.classList.toggle('active',x===b));
+    searchQuery = '';
+    document.getElementById('searchInput').value = '';
+    render();
+  });
 });
 
-document.querySelectorAll('.cat-filters button').forEach(b=>{
+document.querySelectorAll('.filter-row button').forEach(b=>{
   b.addEventListener('click',()=>{
-    currentCat=b.dataset.cat;
-    document.querySelectorAll('.cat-filters button').forEach(x=>x.classList.remove('active'));
+    currentFilter = b.dataset.filter;
+    document.querySelectorAll('.filter-row button').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     render();
   });
 });
 
 document.getElementById('searchInput').addEventListener('input',e=>{
-  searchQuery=e.target.value;
+  searchQuery = e.target.value;
   render();
 });
 
-// === OCR & AUTO-PARSE ===
-function showOcrStatus(msg, el){
-  let s = document.getElementById(el);
-  if(!s){
-    s = document.createElement('div');
-    s.id = el;
-    s.style.cssText = 'padding:8px 12px;border-radius:10px;background:rgba(77,171,247,.15);color:var(--blue);font-size:.82rem;margin:8px 0;text-align:center';
-  }
-  s.textContent = msg;
-  return s;
-}
-
-async function runOCR(imageData){
-  const {createWorker} = Tesseract;
-  const worker = await createWorker('eng');
-  const {data} = await worker.recognize(imageData);
-  await worker.terminate();
-  return data.text;
-}
-
-function parseCardText(text){
-  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
-  const result = {name:'',company:'',phone:'',email:'',raw:text};
-  
-  // Email
-  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
-  if(emailMatch) result.email = emailMatch[0].toLowerCase();
-  
-  // Phone - various formats
-  const phoneMatch = text.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}/);
-  if(phoneMatch) result.phone = phoneMatch[0].replace(/[^\d+\-() ]/g,'').trim();
-  
-  // Website
-  const webMatch = text.match(/(?:www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?/);
-  
-  // Name heuristic: first line that's 2-4 words, no digits, no @, not a common label
-  const skipWords = ['phone','fax','email','tel','cell','office','mobile','address','www','http','inc','llc','corp'];
-  for(const line of lines){
-    const clean = line.replace(/[^a-zA-Z\s]/g,'').trim();
-    const words = clean.split(/\s+/);
-    if(words.length >= 2 && words.length <= 4 && !line.match(/\d/) && !line.includes('@') && !skipWords.some(w=>clean.toLowerCase().includes(w))){
-      result.name = line;
-      break;
-    }
-  }
-  
-  // Company: usually the line after the name, or a line with Inc/LLC/Corp/Co/Group
-  const companyMatch = lines.find(l=> /\b(inc|llc|corp|co\b|company|group|foods|brands|solutions|enterprises|services)\b/i.test(l) && l!==result.name);
-  if(companyMatch) result.company = companyMatch;
-  else if(result.name){
-    const nameIdx = lines.indexOf(result.name);
-    if(nameIdx >= 0 && nameIdx+1 < lines.length){
-      const next = lines[nameIdx+1];
-      if(!next.includes('@') && !phoneMatch?.[0]?.includes(next)){
-        result.company = next;
-      }
-    }
-  }
-  
-  return result;
-}
-
-async function autoOcrCard(imageData){
-  const statusEl = 'cardOcrStatus';
-  const btn = document.getElementById('runOcrBtn');
-  const parent = btn.parentElement;
-  const status = showOcrStatus('🔍 Reading card...', statusEl);
-  btn.before(status);
-  btn.disabled = true;
-  btn.textContent = '⏳ Scanning...';
-  
-  try{
-    const text = await runOCR(imageData);
-    const parsed = parseCardText(text);
-    
-    document.getElementById('cardOcrText').value = text;
-    if(parsed.name && !document.getElementById('cardName').value) document.getElementById('cardName').value = parsed.name;
-    if(parsed.company && !document.getElementById('cardCompany').value) document.getElementById('cardCompany').value = parsed.company;
-    if(parsed.phone) document.getElementById('cardPhone').value = parsed.phone;
-    if(parsed.email) document.getElementById('cardEmail').value = parsed.email;
-    
-    status.textContent = '✅ Card parsed — review and save';
-    status.style.background = 'rgba(0,184,148,.15)';
-    status.style.color = 'var(--green)';
-  }catch(e){
-    status.textContent = '⚠️ OCR failed — fill in manually';
-    status.style.background = 'rgba(233,69,96,.15)';
-    status.style.color = 'var(--accent)';
-  }
-  btn.disabled = false;
-  btn.textContent = '🔎 Re-run OCR';
-}
-
-async function autoOcrFlyer(imageData){
-  const btn = document.querySelector('#flyerModal .save-btn');
-  const status = showOcrStatus('🔍 Reading flyer...', 'flyerOcrStatus');
-  btn.before(status);
-  
-  try{
-    const text = await runOCR(imageData);
-    // Use first meaningful line as title
-    const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length>3);
-    if(lines.length && !document.getElementById('flyerTitle').value){
-      document.getElementById('flyerTitle').value = lines[0];
-    }
-    if(!document.getElementById('flyerNotes').value){
-      document.getElementById('flyerNotes').value = text;
-    }
-    status.textContent = '✅ Flyer text extracted — review and save';
-    status.style.background = 'rgba(0,184,148,.15)';
-    status.style.color = 'var(--green)';
-  }catch(e){
-    status.textContent = '⚠️ OCR failed — fill in manually';
-    status.style.background = 'rgba(233,69,96,.15)';
-    status.style.color = 'var(--accent)';
-  }
-}
-
-function runCardOCR(){
-  const img = document.getElementById('cardImageData').value;
-  if(!img){alert('Capture or upload an image first');return}
-  autoOcrCard(img);
-}
-
-// Wire up camera capture → auto-OCR
-const origCardCapture = document.getElementById('cardCaptureBtn');
-origCardCapture.removeEventListener('click',()=>{});
-origCardCapture.addEventListener('click',()=>{
-  const img = captureFrame(document.getElementById('cardVideo'),document.getElementById('cardCanvas'));
-  document.getElementById('cardImageData').value = img;
-  document.getElementById('cardPreview').src = img;
-  document.getElementById('cardPreview').classList.remove('hidden');
-  document.getElementById('cardCamArea').classList.add('hidden');
-  stopCamera();
-  autoOcrCard(img);
-});
-
-const origFlyerCapture = document.getElementById('flyerCaptureBtn');
-origFlyerCapture.addEventListener('click',()=>{
-  const img = captureFrame(document.getElementById('flyerVideo'),document.getElementById('flyerCanvas'));
-  document.getElementById('flyerImageData').value = img;
-  document.getElementById('flyerPreview').src = img;
-  document.getElementById('flyerPreview').classList.remove('hidden');
-  document.getElementById('flyerCamArea').classList.add('hidden');
-  stopCamera();
-  autoOcrFlyer(img);
-});
-
-// Wire up file upload → auto-OCR
-document.getElementById('cardFile').addEventListener('change',function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const img = ev.target.result;
-    document.getElementById('cardImageData').value = img;
-    document.getElementById('cardPreview').src = img;
-    document.getElementById('cardPreview').classList.remove('hidden');
-    document.getElementById('cardCamArea').classList.add('hidden');
-    stopCamera();
-    autoOcrCard(img);
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('flyerFile').addEventListener('change',function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const img = ev.target.result;
-    document.getElementById('flyerImageData').value = img;
-    document.getElementById('flyerPreview').src = img;
-    document.getElementById('flyerPreview').classList.remove('hidden');
-    document.getElementById('flyerCamArea').classList.add('hidden');
-    stopCamera();
-    autoOcrFlyer(img);
-  };
-  reader.readAsDataURL(file);
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el){el.classList.remove('show')}});
 });
 
 // Initial render
