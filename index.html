@@ -224,14 +224,17 @@ function startCapture(type){
   captureImage = '';
   
   if(type === 'note'){
-    // Notes don't need a photo
     openModal(type, null);
     return;
   }
   
-  // Trigger camera
-  const input = document.getElementById('cameraInput');
-  input.onchange = function(e){
+  // On iOS, using capture="environment" forces camera only.
+  // Create a fresh input each time to avoid iOS caching issues
+  const existing = document.getElementById('cameraInput');
+  const fresh = existing.cloneNode(true);
+  existing.parentNode.replaceChild(fresh, existing);
+  
+  fresh.onchange = function(e){
     const file = e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
@@ -240,9 +243,10 @@ function startCapture(type){
       openModal(type, captureImage);
     };
     reader.readAsDataURL(file);
-    input.value = '';
   };
-  input.click();
+  
+  // Small delay for iOS
+  setTimeout(() => fresh.click(), 100);
 }
 
 function openModal(type, imageData){
