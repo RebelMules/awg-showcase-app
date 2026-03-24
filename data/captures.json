@@ -1,0 +1,510 @@
+[
+  {
+    "id": 1,
+    "type": "card",
+    "company": "Anthony/Hillphoenix (Dover Food Retail)",
+    "booth": null,
+    "contact": {
+      "name": "Derek Battista",
+      "title": "Regional Sales Manager",
+      "phone": "(713) 703-8046",
+      "email": "dbattista@doverfoodretail.com",
+      "address": "15815 Hermitage Oaks Dr, Tomball TX 77377",
+      "web": ""
+    },
+    "details": "Regional Sales Manager for Anthony/Hillphoenix, a Dover Food Retail brand. Refrigeration and display case equipment.",
+    "image": "card-derek-battista.jpg",
+    "tags": ["refrigeration", "display cases", "dover food retail", "hillphoenix", "equipment"],
+    "timestamp": "2026-03-24T09:00:00-05:00"
+  },
+  {
+    "id": 2,
+    "type": "card",
+    "company": "Blanc Display Group",
+    "booth": null,
+    "contact": {
+      "name": "Brett Padgett",
+      "title": "Area Director of Sales",
+      "phone": "(515) 865-0945",
+      "email": "bpadgett@blancind.com",
+      "address": "",
+      "web": "www.blancdisplaygroup.com"
+    },
+    "details": "Area Director of Sales for Blanc Display Group. Office: (973) 537-0090, Cell: (515) 865-0945. Display and merchandising solutions.",
+    "image": "card-brett-padgett.jpg",
+    "tags": ["display", "merchandising", "fixtures", "retail display"],
+    "timestamp": "2026-03-24T09:05:00-05:00"
+  },
+  {
+    "id": 3,
+    "type": "flyer",
+    "company": "Simbe Robotics",
+    "booth": "1000",
+    "contact": null,
+    "details": "Balls Foods case study. Robot Tally results: 65% improvement in price accuracy, 30% improvement in restock, up to 40 hours/week rededicated to higher-value tasks. Demonstrates ROI of autonomous retail shelf intelligence.",
+    "image": "simbe-balls-foods-case-study.jpg",
+    "tags": ["robotics", "shelf intelligence", "automation", "case study", "price accuracy", "restock", "balls foods"],
+    "timestamp": "2026-03-24T09:15:00-05:00"
+  },
+  {
+    "id": 4,
+    "type": "flyer",
+    "company": "Simbe Robotics",
+    "booth": "1000",
+    "contact": null,
+    "details": "Company overview. Global leader in retail shelf digitization. Product suite: Tally (autonomous robot), Tally Spot, Tally RFID, Simbe Mobile, Virtual Tour, Brand Insights. Trusted by Aldi, BJ's Wholesale, Kroger, Schnucks, and other major retailers.",
+    "image": "simbe-overview.jpg",
+    "tags": ["robotics", "shelf digitization", "retail tech", "Tally", "RFID", "inventory", "AI"],
+    "timestamp": "2026-03-24T09:20:00-05:00"
+  },
+  {
+    "id": 5,
+    "type": "pricing",
+    "company": "Amigo Mobility",
+    "booth": null,
+    "contact": {
+      "name": "Hannah Diberardino",
+      "title": "Retail Account Manager",
+      "phone": "1-989-261-2851",
+      "email": "hdiberardino@myamigo.com",
+      "address": "6693 Dixie Hwy, Bridgeport MI 48722",
+      "web": ""
+    },
+    "details": "VistaShopper motorized shopping cart. Base price: $1,275/cart. Optional: SmartSensor +$130, SmartTrack +$185. Pricing valid through 3/31/26. Two files captured: card with contact and pricing sheet.",
+    "image": "amigo-vistashopper-with-card.jpg",
+    "tags": ["motorized cart", "mobility", "ADA", "accessibility", "VistaShopper", "SmartSensor", "SmartTrack"],
+    "timestamp": "2026-03-24T09:30:00-05:00"
+  },
+  {
+    "id": 6,
+    "type": "pricing",
+    "company": "Cox Sales & Service",
+    "booth": "123",
+    "contact": {
+      "name": "Mark Polson",
+      "title": "",
+      "phone": "(770) 936-9555",
+      "email": "mark@coxsales.com",
+      "address": "",
+      "web": "www.coxsales.com"
+    },
+    "details": "AWG pricing sheet. Aluminum cooler shelving: $409-$542. Unarco shopping carts: M90U $169-$184, CC48 $149-$159. AWG contact: Dana Taylor, dana.taylor@awginc.com, 913-288-1883.",
+    "image": "file_42.jpg",
+    "tags": ["cooler shelving", "shopping carts", "fixtures", "Unarco", "aluminum shelving", "AWG pricing"],
+    "timestamp": "2026-03-24T09:40:00-05:00"
+  },
+  {
+    "id": 7,
+    "type": "product",
+    "company": "Hussmann",
+    "booth": "112",
+    "contact": null,
+    "details": "Hussmann refrigeration and display cases booth. Commercial refrigeration equipment for grocery retail.",
+    "image": "hussmann-booth.jpg",
+    "tags": ["refrigeration", "display cases", "commercial refrigeration", "coolers", "freezers"],
+    "timestamp": "2026-03-24T09:50:00-05:00"
+  },
+  {
+    "id": 8,
+    "type": "flyer",
+    "company": "Where's My Shrink?",
+    "booth": null,
+    "contact": {
+      "name": "",
+      "title": "",
+      "phone": "602.448.8502",
+      "email": "info@wheresmyshrink.com",
+      "address": "",
+      "web": "wheresmyshrink.com"
+    },
+    "details": "Retail shrink audit and training service. 5-step process for identifying and reducing shrink. Targets independent grocers.",
+    "image": "wheres-my-shrink-website.jpg",
+    "tags": ["shrink", "loss prevention", "audit", "training", "retail operations"],
+    "timestamp": "2026-03-24T10:00:00-05:00"
+  },
+  {
+    "id": 9,
+    "type": "badge",
+    "company": "Hansen's IGA Inc",
+    "booth": null,
+    "contact": {
+      "name": "Nick Hansen",
+      "title": "",
+      "phone": "",
+      "email": "",
+      "address": "Bangor, WI",
+      "web": ""
+    },
+    "details": "Badge #9166. Independent grocery retailer. Hansen's IGA Inc, Bangor WI.",
+    "image": "nick-hansen-badge.jpg",
+    "tags": ["IGA", "independent retailer", "badge", "Wisconsin"],
+    "timestamp": "2026-03-24T10:10:00-05:00"
+  },
+  {
+    "id": 10,
+    "type": "card",
+    "company": "IGA",
+    "booth": null,
+    "contact": {
+      "name": "Tom Venere",
+      "title": "Senior Director IGA Exclusive Brands",
+      "phone": "(513) 310-9160",
+      "email": "tvenere@igainc.com",
+      "address": "8745 W Higgins Rd Ste 210, Chicago IL 60631",
+      "web": "igainc.com"
+    },
+    "details": "Senior Director for IGA Exclusive Brands. Associated with the 'That's Italy' Italian imports private label line.",
+    "image": "iga-thats-italy-tom-venere.jpg",
+    "tags": ["IGA", "private label", "That's Italy", "Italian imports", "exclusive brands"],
+    "timestamp": "2026-03-24T10:20:00-05:00"
+  },
+  {
+    "id": 11,
+    "type": "flyer",
+    "company": "IGA / That's Italy",
+    "booth": null,
+    "contact": null,
+    "details": "That's Italy fact sheet. IGA exclusive Italian imports line. Products: pasta ($1.99-$2.49), sauce ($6.99), pesto ($3.99), vinegar. Clean labels, non-GMO certified. Available through AWG HGS warehouse.",
+    "image": "thats-italy-fact-sheet.jpg",
+    "tags": ["That's Italy", "IGA", "private label", "Italian", "pasta", "sauce", "pesto", "non-GMO", "clean label", "AWG HGS"],
+    "timestamp": "2026-03-24T10:25:00-05:00"
+  },
+  {
+    "id": 12,
+    "type": "pricing",
+    "company": "IGA / That's Italy",
+    "booth": null,
+    "contact": null,
+    "details": "That's Italy HGS warehouse items list with AWG item codes. Complete SKU listing for ordering through AWG HGS warehouse.",
+    "image": "thats-italy-hgs-warehouse-items.jpg",
+    "tags": ["That's Italy", "IGA", "HGS warehouse", "AWG codes", "ordering", "Italian imports"],
+    "timestamp": "2026-03-24T10:30:00-05:00"
+  },
+  {
+    "id": 13,
+    "type": "flyer",
+    "company": "Zephyr Solutions / Topco",
+    "booth": "116-J",
+    "contact": null,
+    "details": "Helium supply program in partnership with Topco. To order: helium@zephyrsolutions.com or RBS@awginc.com. National buying power and supply redundancy for independent retailers.",
+    "image": "zephyr-helium-program.jpg",
+    "tags": ["helium", "Topco", "Zephyr", "party supplies", "balloon", "supply program", "AWG RBS"],
+    "timestamp": "2026-03-24T10:40:00-05:00"
+  },
+  {
+    "id": 14,
+    "type": "flyer",
+    "company": "Zephyr Solutions / Topco",
+    "booth": "116-J",
+    "contact": null,
+    "details": "Helium program details. Key benefits: national buying power, supply redundancy, annual O-ring replacement included. Managed helium supply solution for retail stores.",
+    "image": "zephyr-topco-helium-details.jpg",
+    "tags": ["helium", "Topco", "Zephyr", "supply chain", "O-ring", "balloon", "party supplies"],
+    "timestamp": "2026-03-24T10:45:00-05:00"
+  },
+  {
+    "id": 15,
+    "type": "card",
+    "company": "Zephyr Solutions",
+    "booth": "116-J",
+    "contact": {
+      "name": "Maggie Basta",
+      "title": "National Sales Manager Grocery/Retail",
+      "phone": "440-937-9993",
+      "email": "mbasta@zephyrsolutions.com",
+      "address": "1050 Lear Industrial Pkwy, Avon OH 44011",
+      "web": ""
+    },
+    "details": "Two cards captured together. Maggie Basta: National Sales Manager Grocery/Retail, 440-937-9993 / 216-778-9180. Charity Hasselback: VP Customer & Supplier Operations, chasselback@zephyrsolutions.com. 1050 Lear Industrial Pkwy, Avon OH 44011.",
+    "image": "zephyr-cards-hasselback-basta.jpg",
+    "tags": ["helium", "Zephyr Solutions", "party supplies", "balloon", "supply chain"],
+    "timestamp": "2026-03-24T10:50:00-05:00"
+  },
+  {
+    "id": 16,
+    "type": "product",
+    "company": "Cafe Valley Bakery",
+    "booth": "904",
+    "contact": null,
+    "details": "Booth display featuring full bakery line. Products shown: coffeecakes, brownie bites, cake bites, mini cupcakes. In-store bakery and packaged goods supplier.",
+    "image": "cafe-valley-bakery-display.jpg",
+    "tags": ["bakery", "coffeecakes", "brownie bites", "cake bites", "cupcakes", "packaged bakery"],
+    "timestamp": "2026-03-24T11:00:00-05:00"
+  },
+  {
+    "id": 17,
+    "type": "product",
+    "company": "Cafe Valley Bakery",
+    "booth": "904",
+    "contact": null,
+    "details": "Marble Chocolate Chip Ring Cake, 20oz. Thaw for 24 hours before serving. Consume within 14 days of thawing. Frozen shelf life.",
+    "image": "cafe-valley-marble-choc-chip.jpg",
+    "tags": ["bakery", "ring cake", "marble cake", "chocolate chip", "frozen bakery", "Cafe Valley"],
+    "timestamp": "2026-03-24T11:05:00-05:00"
+  },
+  {
+    "id": 18,
+    "type": "product",
+    "company": "37th Street Bakery",
+    "booth": "914",
+    "contact": null,
+    "details": "Bread Twists line, 11oz. Three flavors: Tomato Basil, Jalapeno Cheddar, Garlic Parmesan. Made in Chicago.",
+    "image": "37th-street-bread-twists.jpg",
+    "tags": ["bakery", "bread twists", "artisan bread", "tomato basil", "jalapeno cheddar", "garlic parmesan", "Chicago bakery"],
+    "timestamp": "2026-03-24T11:15:00-05:00"
+  },
+  {
+    "id": 19,
+    "type": "product",
+    "company": "37th Street Bakery",
+    "booth": "914",
+    "contact": null,
+    "details": "American Celebration Danish - Red, White & Blue limited edition. Available Memorial Day through Labor Day. 14oz, case of 12. 12-month frozen shelf life. Item numbers: #5578, #5680, #6580.",
+    "image": "37th-street-american-celebration-danish.jpg",
+    "tags": ["bakery", "danish", "seasonal", "LTO", "patriotic", "Memorial Day", "Labor Day", "frozen bakery"],
+    "timestamp": "2026-03-24T11:20:00-05:00"
+  },
+  {
+    "id": 20,
+    "type": "flyer",
+    "company": "Cloverhill / Big Texas (JTM Foods)",
+    "booth": null,
+    "contact": null,
+    "details": "Buy 12 cases, get a free display rack. Products: Cinnamon Rolls, Bear Claw, Honey Buns. Cloverhill and Big Texas brands under JTM Foods.",
+    "image": "cloverhill-big-texas-rack.jpg",
+    "tags": ["bakery", "sweet goods", "cinnamon rolls", "bear claw", "honey buns", "Cloverhill", "Big Texas", "JTM Foods", "display rack", "promotion"],
+    "timestamp": "2026-03-24T11:30:00-05:00"
+  },
+  {
+    "id": 21,
+    "type": "flyer",
+    "company": "37th Street Bakery",
+    "booth": "914",
+    "contact": {
+      "name": "",
+      "title": "",
+      "phone": "773-523-2333",
+      "email": "sales@37bakery.com",
+      "address": "",
+      "web": "37bakery.com"
+    },
+    "details": "Croissant Program overview. SKUs: Spiral Butter 2.5oz, All-Butter 2oz, Butter Blend 1.75oz and 0.85oz. Made in Chicago. Premium artisan croissants for in-store bakery programs.",
+    "image": "37th-street-croissants-flyer.jpg",
+    "tags": ["bakery", "croissants", "artisan", "in-store bakery", "Chicago bakery", "butter croissant"],
+    "timestamp": "2026-03-24T11:35:00-05:00"
+  },
+  {
+    "id": 22,
+    "type": "flyer",
+    "company": "Big Texas / JTM Foods",
+    "booth": null,
+    "contact": null,
+    "details": "New Big Texas Cinnamon Roll packs. Two new SKUs: (1) 12/6ct/2.75oz multi-pack - available now. (2) 96ct/4oz pre-loaded shipper display - first ship date May 1, 2026. JTM Foods LLC.",
+    "image": "file_68.jpg",
+    "tags": ["bakery", "cinnamon rolls", "Big Texas", "JTM Foods", "new item", "multi-pack", "shipper display"],
+    "timestamp": "2026-03-24T11:40:00-05:00"
+  },
+  {
+    "id": 23,
+    "type": "flyer",
+    "company": "JTM Foods",
+    "booth": null,
+    "contact": {
+      "name": "",
+      "title": "",
+      "phone": "814-899-0886",
+      "email": "info@jtmfoods.net",
+      "address": "2126 East 33rd St, Erie PA 18510",
+      "web": "www.jtmfoods.net"
+    },
+    "details": "Bakery Promotional Support Calendar 2026. Seasonal LTO pie program: National Pie Party (Dec-Jan), Cream Classics (Mar-Apr), Spring Berry Bash (May-Jun), Summer Zest (Jul-Aug), Sweet Harvest (Sep-Oct), Cozy Cravings (Nov-Dec). Free milk IRC on-pack offer included.",
+    "image": "file_69.jpg",
+    "tags": ["bakery", "pie", "LTO", "seasonal", "promotional calendar", "JTM Foods", "IRC", "milk offer"],
+    "timestamp": "2026-03-24T11:45:00-05:00"
+  },
+  {
+    "id": 24,
+    "type": "pricing",
+    "company": "Cacique Foods",
+    "booth": "833",
+    "contact": {
+      "name": "Mike DiCarlo",
+      "title": "",
+      "phone": "(314) 681-8881",
+      "email": "MDiCarlo@caciquefoods.com",
+      "address": "",
+      "web": ""
+    },
+    "details": "AWG Shows Key Sales sheet. Full product catalog with AWG codes and UPCs. Products: shredded cheese, cheese, chorizo, cremas, squeeze creams, salsa. Hispanic dairy and meat specialty products.",
+    "image": "file_70.jpg",
+    "tags": ["Hispanic foods", "cheese", "chorizo", "crema", "salsa", "Cacique", "AWG codes", "specialty foods"],
+    "timestamp": "2026-03-24T11:55:00-05:00"
+  },
+  {
+    "id": 25,
+    "type": "flyer",
+    "company": "Milo's Tea",
+    "booth": "744",
+    "contact": null,
+    "details": "New Items for AWG Mid-South Division. Three new flavors: Zero Sugar Lemonade 20oz (AWG 043400), Blackberry Sweet Tea Gallon (AWG 043396), Fruit Punch Gallon (AWG 043393). LTO seasonal teas: Feb-Apr Blackberry, May-Aug Peach, Sep-Dec Raspberry. Family-owned, women-owned, zero waste certified. www.drinkmilos.com.",
+    "image": "file_71.jpg",
+    "tags": ["tea", "sweet tea", "lemonade", "Milo's", "new items", "AWG Mid-South", "women-owned", "zero waste", "beverages"],
+    "timestamp": "2026-03-24T12:00:00-05:00"
+  },
+  {
+    "id": 26,
+    "type": "pricing",
+    "company": "Milo's Tea",
+    "booth": "744",
+    "contact": null,
+    "details": "AWG Mid-South Distribution full catalog with AWG codes. Gallons: Famous Sweet Tea AWG 945766, Zero Sugar AWG 946020, Unsweet AWG 945768, Extra Sweet AWG 106235, Sweet Tea & Lemonade AWG 144322, Lemonade AWG 144323. Also half-gallon and 20oz sizes available.",
+    "image": "file_72.jpg",
+    "tags": ["tea", "sweet tea", "Milo's", "AWG codes", "AWG Mid-South", "pricing", "catalog", "beverages"],
+    "timestamp": "2026-03-24T12:05:00-05:00"
+  },
+  {
+    "id": 27,
+    "type": "card",
+    "company": "Rastelli's",
+    "booth": "719",
+    "contact": {
+      "name": "T.J. DeMarco",
+      "title": "Business Development Manager",
+      "phone": "(856) 994-4047",
+      "email": "tdemarco@rastellis.com",
+      "address": "300 Heron Dr, Swedesboro NJ 08085",
+      "web": "rastellis.com"
+    },
+    "details": "Business Development Manager at Rastelli's, established 1976. Office: (856) 803-1100 x185. Premium protein and specialty meat supplier.",
+    "image": "file_73.jpg",
+    "tags": ["meat", "protein", "premium", "Rastelli's", "specialty meats", "seafood"],
+    "timestamp": "2026-03-24T12:15:00-05:00"
+  },
+  {
+    "id": 28,
+    "type": "product",
+    "company": "Rastelli's",
+    "booth": "719",
+    "contact": null,
+    "details": "Ready in Minutes pre-marinated protein line. All products antibiotic-free, expertly cut and trimmed. Varieties: Teriyaki Chicken, Shawarma Chicken Thighs, Italian Style Chicken, Italian Style Pork Chops, Caribbean Jerk Chicken, Butter Style Chicken, Margarita Lime Chicken, Al Pastor Pork Chops, Bourbon Black Pepper Pork, Lemon Herb, Filet Bites.",
+    "image": "file_74.jpg",
+    "tags": ["meat", "protein", "marinated", "ready to cook", "antibiotic-free", "chicken", "pork", "Rastelli's"],
+    "timestamp": "2026-03-24T12:20:00-05:00"
+  },
+  {
+    "id": 29,
+    "type": "pricing",
+    "company": "Ducktrap Smoked Seafood",
+    "booth": null,
+    "contact": null,
+    "details": "Duck Trap smoked seafood items with AWG codes. Hot Honey Cold Smoked Atlantic Salmon 4oz (AWG 16748, NEW), Hot Honey Smoke Roasted Atlantic Salmon 6oz (AWG 16753), Spruce Point Atlantic Salmon (AWG 290078), Spruce Point Pastrami Salmon (AWG 289124), Hot Honey Atlantic Salmon Side NEW (AWG 16753). Farm-raised, craft-smoked. 12-month frozen shelf life.",
+    "image": "file_62.jpg",
+    "tags": ["seafood", "smoked salmon", "Ducktrap", "AWG codes", "specialty", "hot honey", "pastrami salmon"],
+    "timestamp": "2026-03-24T12:30:00-05:00"
+  },
+  {
+    "id": 30,
+    "type": "pricing",
+    "company": "MOWI",
+    "booth": null,
+    "contact": null,
+    "details": "MOWI Frozen Atlantic Salmon Skin Pack. Full pricing and discount schedule Jan 4, 2026 - Jan 2, 2027. AWG-exclusive pricing. SKUs: Singles, Portions for 2, 2x5 Portions. Flavors: Plain, Sweet Bourbon, Tuscan Herb, Norwegian, Lightly Smoked, Hot Honey Smoked. Also Tilapia, Pacific Cod, Yellow Fin Tuna. AWG estimated unit costs $1.35-$7.37 with promo net costs. Can merchandise both frozen and fresh.",
+    "image": "mowi-pricing.jpg",
+    "tags": ["seafood", "salmon", "frozen", "MOWI", "AWG pricing", "tilapia", "cod", "tuna", "skin pack"],
+    "timestamp": "2026-03-24T12:35:00-05:00"
+  },
+  {
+    "id": 31,
+    "type": "pricing",
+    "company": "WK Kellogg Co",
+    "booth": "323",
+    "contact": null,
+    "details": "Balanced Family Size Web Blast promotion dated 5/18/2026. AWG #563311. 156-unit display pallet: 48 Mini Wheats 18oz, 54 Raisin Bran 24oz, 54 Special K Red Berries. SRP $594.21, Net Cost $330.84, Allowance $5.93/unit. 36% deal. Ship window 6/27-7/10/2026. Promo: Save $4 on milk when you buy TWO Kellogg's Family Size cereal. Free milk IRC on-pack Q1 2026.",
+    "image": "wk-kellogg-web-blast.jpg",
+    "tags": ["cereal", "Kellogg's", "Mini Wheats", "Raisin Bran", "Special K", "AWG deal", "display", "web blast", "IRC offer"],
+    "timestamp": "2026-03-24T12:45:00-05:00"
+  },
+  {
+    "id": 32,
+    "type": "badge",
+    "company": "Clorox",
+    "booth": "235",
+    "contact": {
+      "name": "Bubba O'Brien",
+      "title": "Customer Team Manager",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "web": ""
+    },
+    "details": "Customer Team Manager at Clorox, Booth 235.",
+    "image": "bubba-obrien-badge.jpg",
+    "tags": ["Clorox", "cleaning", "household products", "badge"],
+    "timestamp": "2026-03-24T13:00:00-05:00"
+  },
+  {
+    "id": 33,
+    "type": "badge",
+    "company": "JM Smucker",
+    "booth": "227",
+    "contact": {
+      "name": "Tom Renslow",
+      "title": "Region Manager",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "web": ""
+    },
+    "details": "Region Manager at JM Smucker, Booth 227.",
+    "image": "tom-renslow-badge.jpg",
+    "tags": ["JM Smucker", "badge", "coffee", "jam", "Folgers", "Jif"],
+    "timestamp": "2026-03-24T13:05:00-05:00"
+  },
+  {
+    "id": 34,
+    "type": "product",
+    "company": "JM Smucker / Cafe Bustelo",
+    "booth": "227",
+    "contact": null,
+    "details": "Cafe Bustelo Cafe Estilo Espresso Style Coffee Beverage, Vanilla flavor. 40 fl oz (1.25 QT). Chilled and ready-to-drink. New RTD product line from the Cafe Bustelo brand at JM Smucker booth.",
+    "image": "cafe-bustelo-rtd.jpg",
+    "tags": ["coffee", "RTD", "ready-to-drink", "Cafe Bustelo", "JM Smucker", "espresso", "chilled coffee", "new item"],
+    "timestamp": "2026-03-24T13:10:00-05:00"
+  },
+  {
+    "id": 37,
+    "type": "card",
+    "company": "Design Mechanical Inc",
+    "booth": "104",
+    "contact": {
+      "name": "Mike Cash",
+      "title": "Service Sales Engineer",
+      "phone": "913-915-0099",
+      "email": "mcash@dmi-kc.com",
+      "address": "",
+      "web": "dmi-kc.com"
+    },
+    "details": "Service Sales Engineer at Design Mechanical Inc, Booth 104. Office: 913-281-7200, Fax: 913-281-7201, Cell: 913-915-0099. Services: Mechanical Service, Refrigeration, Mechanical Construction.",
+    "image": "mike-cash-dmi-card.jpg",
+    "tags": ["refrigeration", "mechanical", "HVAC", "construction", "service", "Kansas City"],
+    "timestamp": "2026-03-24T14:00:00-05:00"
+  },
+  {
+    "id": 38,
+    "type": "flyer",
+    "company": "Blue Rhino / Ferrellgas",
+    "booth": "116-I",
+    "contact": {
+      "name": "Jill Gooder",
+      "title": "",
+      "phone": "816.407.8051",
+      "email": "jillgooder@bluerhino.com",
+      "address": "",
+      "web": "BlueRhino.com"
+    },
+    "details": "America's #1 propane exchange brand with 53% market share and 72% consumer awareness. Retail pricing $22.99-$62.99. Free display and installation (up to $750 value). 24/7 ordering available. Under Ferrellgas.",
+    "image": "blue-rhino-flyer.jpg",
+    "tags": ["propane", "Blue Rhino", "Ferrellgas", "exchange", "outdoor", "grilling", "gas exchange"],
+    "timestamp": "2026-03-24T14:15:00-05:00"
+  }
+]

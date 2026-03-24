@@ -222,6 +222,50 @@ let editIdx = -1;
 
 function save(){localStorage.setItem('awg_captures2',JSON.stringify(captures))}
 
+// Load pre-built captures from server on first visit
+async function loadServerCaptures(){
+  // Only load if localStorage is empty (first visit or cleared)
+  if(captures.length > 0) return;
+  try {
+    const resp = await fetch('/data/captures.json');
+    if(!resp.ok) return;
+    const serverData = await resp.json();
+    // Convert server format to app format
+    const converted = serverData.map(entry => {
+      const c = {
+        type: entry.type === 'pricing' ? 'flyer' : entry.type === 'badge' ? 'card' : entry.type === 'product' ? 'flyer' : entry.type,
+        image: '', // images stored server-side, not as data URLs
+        tags: (entry.tags||[]).join(', '),
+        ts: new Date(entry.timestamp).getTime(),
+        date: new Date(entry.timestamp).toLocaleDateString(),
+        serverImage: entry.image, // reference to file
+        company: entry.company || '',
+        booth: entry.booth || '',
+        details: entry.details || ''
+      };
+      if(entry.type === 'card' || entry.type === 'badge'){
+        c.type = 'card';
+        c.name = entry.contact?.name || '';
+        c.title = entry.contact?.title || '';
+        c.company = entry.contact?.name ? (entry.company || '') : (entry.company || '');
+        c.phone = entry.contact?.phone || '';
+        c.email = entry.contact?.email || '';
+        c.address = entry.contact?.address || '';
+        c.web = entry.contact?.web || '';
+      } else {
+        c.type = 'flyer';
+        c.flyerTitle = entry.company + (entry.booth ? ' (Booth ' + entry.booth + ')' : '');
+        c.notes = entry.details;
+      }
+      return c;
+    });
+    captures = converted;
+    save();
+    render();
+  } catch(e){ console.log('No server captures:', e) }
+}
+loadServerCaptures();
+
 // === CAPTURE FLOW ===
 function startCapture(type){
   captureType = type;
