@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/parse-card.js": {
+      "maxDuration": 30
+    }
+  }
+}
