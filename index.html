@@ -189,7 +189,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <input type="text" id="fTags" placeholder="e.g. refrigeration, follow-up, pricing">
 
     <div style="color:var(--text2);font-size:.72rem;text-align:center;margin-top:10px">📸 Photo is always saved — fill in what you can, skip the rest</div>
-    <button class="save-btn" id="saveBtn" onclick="saveCapture()">💾 Save Capture</button>
+    <div style="height:60px"></div>
+    <div style="position:sticky;bottom:0;left:0;right:0;padding:10px 0;background:var(--card);z-index:10">
+      <button class="save-btn" id="saveBtn" type="button">💾 Save Capture</button>
+    </div>
   </div>
 </div>
 
@@ -434,35 +437,53 @@ function compressImage(dataUrl, maxWidth){
 // Card/flyer parsing now handled server-side by Vision AI
 
 // === SAVE ===
+document.getElementById('saveBtn').addEventListener('touchend', function(e){
+  e.preventDefault();
+  saveCapture();
+});
+document.getElementById('saveBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  saveCapture();
+});
+
 function saveCapture(){
-  const entry = {
-    type: captureType,
-    image: captureImage,
-    tags: document.getElementById('fTags').value,
-    ts: Date.now(),
-    date: new Date().toLocaleDateString()
-  };
-  
-  if(captureType === 'card'){
-    entry.name = document.getElementById('fName').value;
-    entry.title = document.getElementById('fTitle').value;
-    entry.company = document.getElementById('fCompany').value;
-    entry.phone = document.getElementById('fPhone').value;
-    entry.email = document.getElementById('fEmail').value;
-    entry.address = document.getElementById('fAddress').value;
-    entry.web = document.getElementById('fWeb').value;
-  } else if(captureType === 'flyer'){
-    entry.flyerTitle = document.getElementById('fFlyerTitle').value;
-    entry.notes = document.getElementById('fFlyerNotes').value;
-  } else {
-    entry.booth = document.getElementById('fNoteBooth').value;
-    entry.notes = document.getElementById('fNoteText').value;
+  try {
+    const entry = {
+      type: captureType,
+      image: captureImage,
+      tags: document.getElementById('fTags')?.value || '',
+      ts: Date.now(),
+      date: new Date().toLocaleDateString()
+    };
+    
+    if(captureType === 'card'){
+      entry.name = document.getElementById('fName')?.value || '';
+      entry.title = document.getElementById('fTitle')?.value || '';
+      entry.company = document.getElementById('fCompany')?.value || '';
+      entry.phone = document.getElementById('fPhone')?.value || '';
+      entry.email = document.getElementById('fEmail')?.value || '';
+      entry.address = document.getElementById('fAddress')?.value || '';
+      entry.web = document.getElementById('fWeb')?.value || '';
+    } else if(captureType === 'flyer'){
+      entry.flyerTitle = document.getElementById('fFlyerTitle')?.value || '';
+      entry.notes = document.getElementById('fFlyerNotes')?.value || '';
+    } else {
+      entry.booth = document.getElementById('fNoteBooth')?.value || '';
+      entry.notes = document.getElementById('fNoteText')?.value || '';
+    }
+    
+    captures.unshift(entry);
+    save();
+    closeModal();
+    render();
+    
+    // Visual confirmation
+    document.getElementById('countBadge').style.background = 'var(--green)';
+    setTimeout(() => { document.getElementById('countBadge').style.background = 'var(--accent)'; }, 1000);
+  } catch(e){
+    alert('Save error: ' + e.message);
+    console.error('Save failed:', e);
   }
-  
-  captures.unshift(entry); // newest first
-  save();
-  closeModal();
-  render();
 }
 
 // === RENDER ===
