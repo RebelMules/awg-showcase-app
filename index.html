@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#1a1a2e">
 <title>AWG Innovation Showcase 2026</title>
 <link rel="manifest" href="manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;--accent:#e94560;--accent2:#0f3460;--text:#eee;--text2:#aab;--green:#00b894;--blue:#4dabf7;--border:#2a2a4a;--radius:14px}
@@ -22,6 +23,13 @@ h3{font-size:.95rem;font-weight:600;color:var(--blue)}
 .header h1{color:#fff;font-size:1.15rem}
 .header .subtitle{color:var(--text2);font-size:.75rem}
 .header .date-badge{background:var(--accent);color:#fff;font-size:.65rem;padding:3px 8px;border-radius:20px;font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stat-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 8px;text-align:center}
+.stat-chip .num{display:block;font-weight:700;font-size:1rem;color:#fff}
+.stat-chip .label{display:block;font-size:.65rem;color:var(--text2);margin-top:2px}
+.quick-actions{display:flex;gap:8px;margin-top:12px}
+.quick-actions button{flex:1;border:none;border-radius:12px;padding:10px 12px;font-weight:700;font-size:.82rem;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.install-hint{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.25);color:#dcecff;font-size:.75rem}
 
 /* Search */
 .search-wrap{padding:10px 16px;position:sticky;top:68px;z-index:99;background:var(--bg)}
@@ -141,6 +149,17 @@ h3{font-size:.95rem;font-weight:600;color:var(--blue)}
     </div>
     <span class="date-badge" id="dayBadge">DAY 1</span>
   </div>
+  <div class="stats-grid">
+    <div class="stat-chip"><span class="num" id="statExhibitors">182</span><span class="label">Exhibitors</span></div>
+    <div class="stat-chip"><span class="num" id="statContacts">0</span><span class="label">Contacts</span></div>
+    <div class="stat-chip"><span class="num" id="statFlyers">0</span><span class="label">Flyers</span></div>
+    <div class="stat-chip"><span class="num" id="statNotes">0</span><span class="label">Notes</span></div>
+  </div>
+  <div class="quick-actions">
+    <button onclick="openScan('')">📇 Quick Card</button>
+    <button onclick="openFlyer('')">📄 Quick Flyer</button>
+  </div>
+  <div class="install-hint" id="installHint">Works offline after first load. Add to Home Screen on iPhone for the best show-floor experience.</div>
 </div>
 
 <!-- Search -->
@@ -196,6 +215,8 @@ h3{font-size:.95rem;font-weight:600;color:var(--blue)}
       <button class="capture-btn" id="cardCaptureBtn"></button>
     </div>
     <img class="captured-img hidden" id="cardPreview">
+    <label>Upload from camera roll / camera</label>
+    <input type="file" id="cardFile" accept="image/*" capture="environment">
     <label>Name</label>
     <input type="text" id="cardName" placeholder="Contact name">
     <label>Company</label>
@@ -204,10 +225,13 @@ h3{font-size:.95rem;font-weight:600;color:var(--blue)}
     <input type="tel" id="cardPhone" placeholder="Phone number">
     <label>Email</label>
     <input type="email" id="cardEmail" placeholder="Email">
+    <label>OCR Text</label>
+    <textarea id="cardOcrText" placeholder="OCR output will appear here for quick review"></textarea>
     <label>Notes</label>
     <textarea id="cardNotes" placeholder="Any notes..."></textarea>
     <input type="hidden" id="cardExhibitor">
     <input type="hidden" id="cardImageData">
+    <button class="save-btn" id="runOcrBtn" onclick="runCardOCR()">🔎 Run OCR</button>
     <button class="save-btn" onclick="saveCard()">💾 Save Contact</button>
   </div>
 </div>
@@ -222,6 +246,8 @@ h3{font-size:.95rem;font-weight:600;color:var(--blue)}
       <button class="capture-btn" id="flyerCaptureBtn"></button>
     </div>
     <img class="captured-img hidden" id="flyerPreview">
+    <label>Upload from camera roll / camera</label>
+    <input type="file" id="flyerFile" accept="image/*" capture="environment">
     <label>Title / Description</label>
     <input type="text" id="flyerTitle" placeholder="What is this?">
     <label>Notes</label>
@@ -523,6 +549,35 @@ let searchQuery = '';
 let stars = JSON.parse(localStorage.getItem('awg_stars')||'{}');
 let captures = JSON.parse(localStorage.getItem('awg_captures')||'[]');
 let activeStream = null;
+let deferredPrompt = null;
+
+function saveCaptures(){
+  localStorage.setItem('awg_captures', JSON.stringify(captures));
+}
+
+function updateStats(){
+  document.getElementById('statExhibitors').textContent = exhibitors.length;
+  document.getElementById('statContacts').textContent = captures.filter(c=>c.type==='card').length;
+  document.getElementById('statFlyers').textContent = captures.filter(c=>c.type==='flyer').length;
+  document.getElementById('statNotes').textContent = captures.filter(c=>c.type==='note').length;
+}
+
+function formatBooth(booth){
+  return booth && booth !== '—' ? `Booth ${booth}` : 'Booth TBD';
+}
+
+function formatWebsite(web){
+  return web ? web : 'No website listed';
+}
+
+function escapeHtml(value=''){
+  return String(value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
 
 // === DAY BADGE ===
 function updateDayBadge(){
@@ -551,6 +606,7 @@ function render(){
   else if(currentTab==='schedule') renderSchedule(c);
   else if(currentTab==='workshops') renderWorkshops(c);
   else if(currentTab==='captures') renderCaptures(c);
+  updateStats();
 }
 
 function renderExhibitors(c){
@@ -570,8 +626,8 @@ function renderExhibitors(c){
         <div>
           <div class="name">${e.name}${hasCap?'<span class="visited-badge">VISITED</span>':''}</div>
           <div class="meta">
-            <span class="booth">Booth ${e.booth}</span>
-            ${e.web?`<a href="https://${e.web}" target="_blank" style="color:var(--blue);font-size:.75rem;text-decoration:none">${e.web}</a>`:''}
+            <span class="booth">${formatBooth(e.booth)}</span>
+            ${e.web?`<a href="https://${e.web}" target="_blank" style="color:var(--blue);font-size:.75rem;text-decoration:none">${e.web}</a>`:`<span style="font-size:.75rem;color:var(--text2)">${formatWebsite(e.web)}</span>`}
           </div>
           <span class="cat-tag">${catLabels[e.cat]||e.cat}</span>
         </div>
@@ -662,7 +718,7 @@ function toggleStar(name){
 function deleteCapture(idx){
   if(confirm('Delete this capture?')){
     captures.splice(idx,1);
-    localStorage.setItem('awg_captures',JSON.stringify(captures));
+    saveCaptures();
     render();
   }
 }
@@ -702,15 +758,6 @@ function openScan(exhibName){
   startCamera(document.getElementById('cardVideo'));
 }
 
-document.getElementById('cardCaptureBtn').addEventListener('click',()=>{
-  const img = captureFrame(document.getElementById('cardVideo'),document.getElementById('cardCanvas'));
-  document.getElementById('cardImageData').value = img;
-  document.getElementById('cardPreview').src = img;
-  document.getElementById('cardPreview').classList.remove('hidden');
-  document.getElementById('cardCamArea').classList.add('hidden');
-  stopCamera();
-});
-
 function saveCard(){
   captures.push({
     type:'card',
@@ -739,15 +786,6 @@ function openFlyer(exhibName){
   document.getElementById('flyerModal').classList.add('show');
   startCamera(document.getElementById('flyerVideo'));
 }
-
-document.getElementById('flyerCaptureBtn').addEventListener('click',()=>{
-  const img = captureFrame(document.getElementById('flyerVideo'),document.getElementById('flyerCanvas'));
-  document.getElementById('flyerImageData').value = img;
-  document.getElementById('flyerPreview').src = img;
-  document.getElementById('flyerPreview').classList.remove('hidden');
-  document.getElementById('flyerCamArea').classList.add('hidden');
-  stopCamera();
-});
 
 function saveFlyer(){
   captures.push({
@@ -840,6 +878,187 @@ document.querySelectorAll('.cat-filters button').forEach(b=>{
 document.getElementById('searchInput').addEventListener('input',e=>{
   searchQuery=e.target.value;
   render();
+});
+
+// === OCR & AUTO-PARSE ===
+function showOcrStatus(msg, el){
+  let s = document.getElementById(el);
+  if(!s){
+    s = document.createElement('div');
+    s.id = el;
+    s.style.cssText = 'padding:8px 12px;border-radius:10px;background:rgba(77,171,247,.15);color:var(--blue);font-size:.82rem;margin:8px 0;text-align:center';
+  }
+  s.textContent = msg;
+  return s;
+}
+
+async function runOCR(imageData){
+  const {createWorker} = Tesseract;
+  const worker = await createWorker('eng');
+  const {data} = await worker.recognize(imageData);
+  await worker.terminate();
+  return data.text;
+}
+
+function parseCardText(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const result = {name:'',company:'',phone:'',email:'',raw:text};
+  
+  // Email
+  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  if(emailMatch) result.email = emailMatch[0].toLowerCase();
+  
+  // Phone - various formats
+  const phoneMatch = text.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}/);
+  if(phoneMatch) result.phone = phoneMatch[0].replace(/[^\d+\-() ]/g,'').trim();
+  
+  // Website
+  const webMatch = text.match(/(?:www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?/);
+  
+  // Name heuristic: first line that's 2-4 words, no digits, no @, not a common label
+  const skipWords = ['phone','fax','email','tel','cell','office','mobile','address','www','http','inc','llc','corp'];
+  for(const line of lines){
+    const clean = line.replace(/[^a-zA-Z\s]/g,'').trim();
+    const words = clean.split(/\s+/);
+    if(words.length >= 2 && words.length <= 4 && !line.match(/\d/) && !line.includes('@') && !skipWords.some(w=>clean.toLowerCase().includes(w))){
+      result.name = line;
+      break;
+    }
+  }
+  
+  // Company: usually the line after the name, or a line with Inc/LLC/Corp/Co/Group
+  const companyMatch = lines.find(l=> /\b(inc|llc|corp|co\b|company|group|foods|brands|solutions|enterprises|services)\b/i.test(l) && l!==result.name);
+  if(companyMatch) result.company = companyMatch;
+  else if(result.name){
+    const nameIdx = lines.indexOf(result.name);
+    if(nameIdx >= 0 && nameIdx+1 < lines.length){
+      const next = lines[nameIdx+1];
+      if(!next.includes('@') && !phoneMatch?.[0]?.includes(next)){
+        result.company = next;
+      }
+    }
+  }
+  
+  return result;
+}
+
+async function autoOcrCard(imageData){
+  const statusEl = 'cardOcrStatus';
+  const btn = document.getElementById('runOcrBtn');
+  const parent = btn.parentElement;
+  const status = showOcrStatus('🔍 Reading card...', statusEl);
+  btn.before(status);
+  btn.disabled = true;
+  btn.textContent = '⏳ Scanning...';
+  
+  try{
+    const text = await runOCR(imageData);
+    const parsed = parseCardText(text);
+    
+    document.getElementById('cardOcrText').value = text;
+    if(parsed.name && !document.getElementById('cardName').value) document.getElementById('cardName').value = parsed.name;
+    if(parsed.company && !document.getElementById('cardCompany').value) document.getElementById('cardCompany').value = parsed.company;
+    if(parsed.phone) document.getElementById('cardPhone').value = parsed.phone;
+    if(parsed.email) document.getElementById('cardEmail').value = parsed.email;
+    
+    status.textContent = '✅ Card parsed — review and save';
+    status.style.background = 'rgba(0,184,148,.15)';
+    status.style.color = 'var(--green)';
+  }catch(e){
+    status.textContent = '⚠️ OCR failed — fill in manually';
+    status.style.background = 'rgba(233,69,96,.15)';
+    status.style.color = 'var(--accent)';
+  }
+  btn.disabled = false;
+  btn.textContent = '🔎 Re-run OCR';
+}
+
+async function autoOcrFlyer(imageData){
+  const btn = document.querySelector('#flyerModal .save-btn');
+  const status = showOcrStatus('🔍 Reading flyer...', 'flyerOcrStatus');
+  btn.before(status);
+  
+  try{
+    const text = await runOCR(imageData);
+    // Use first meaningful line as title
+    const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length>3);
+    if(lines.length && !document.getElementById('flyerTitle').value){
+      document.getElementById('flyerTitle').value = lines[0];
+    }
+    if(!document.getElementById('flyerNotes').value){
+      document.getElementById('flyerNotes').value = text;
+    }
+    status.textContent = '✅ Flyer text extracted — review and save';
+    status.style.background = 'rgba(0,184,148,.15)';
+    status.style.color = 'var(--green)';
+  }catch(e){
+    status.textContent = '⚠️ OCR failed — fill in manually';
+    status.style.background = 'rgba(233,69,96,.15)';
+    status.style.color = 'var(--accent)';
+  }
+}
+
+function runCardOCR(){
+  const img = document.getElementById('cardImageData').value;
+  if(!img){alert('Capture or upload an image first');return}
+  autoOcrCard(img);
+}
+
+// Wire up camera capture → auto-OCR
+const origCardCapture = document.getElementById('cardCaptureBtn');
+origCardCapture.removeEventListener('click',()=>{});
+origCardCapture.addEventListener('click',()=>{
+  const img = captureFrame(document.getElementById('cardVideo'),document.getElementById('cardCanvas'));
+  document.getElementById('cardImageData').value = img;
+  document.getElementById('cardPreview').src = img;
+  document.getElementById('cardPreview').classList.remove('hidden');
+  document.getElementById('cardCamArea').classList.add('hidden');
+  stopCamera();
+  autoOcrCard(img);
+});
+
+const origFlyerCapture = document.getElementById('flyerCaptureBtn');
+origFlyerCapture.addEventListener('click',()=>{
+  const img = captureFrame(document.getElementById('flyerVideo'),document.getElementById('flyerCanvas'));
+  document.getElementById('flyerImageData').value = img;
+  document.getElementById('flyerPreview').src = img;
+  document.getElementById('flyerPreview').classList.remove('hidden');
+  document.getElementById('flyerCamArea').classList.add('hidden');
+  stopCamera();
+  autoOcrFlyer(img);
+});
+
+// Wire up file upload → auto-OCR
+document.getElementById('cardFile').addEventListener('change',function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = ev.target.result;
+    document.getElementById('cardImageData').value = img;
+    document.getElementById('cardPreview').src = img;
+    document.getElementById('cardPreview').classList.remove('hidden');
+    document.getElementById('cardCamArea').classList.add('hidden');
+    stopCamera();
+    autoOcrCard(img);
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('flyerFile').addEventListener('change',function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = ev.target.result;
+    document.getElementById('flyerImageData').value = img;
+    document.getElementById('flyerPreview').src = img;
+    document.getElementById('flyerPreview').classList.remove('hidden');
+    document.getElementById('flyerCamArea').classList.add('hidden');
+    stopCamera();
+    autoOcrFlyer(img);
+  };
+  reader.readAsDataURL(file);
 });
 
 // Initial render
