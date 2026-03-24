@@ -1,0 +1,10 @@
+{
+  "name": "AWG Innovation Showcase 2026",
+  "short_name": "AWG Showcase",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#1a1a2e",
+  "description": "Show floor companion for AWG Innovation Showcase 2026",
+  "icons": []
+}
