@@ -115,9 +115,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- Main capture zone -->
 <div class="capture-zone" id="captureZone">
   <div class="capture-actions">
-    <button class="btn-card" onclick="startCapture('card')">📇 Business Card</button>
-    <button class="btn-flyer" onclick="startCapture('flyer')">📄 Flyer / Doc</button>
-    <button class="btn-note" onclick="startCapture('note')">📝 Quick Note</button>
+    <button class="btn-card" onclick="startCapture('card')">📇 Card (Camera)</button>
+    <button class="btn-flyer" onclick="startCapture('flyer')">📄 Flyer (Camera)</button>
+  </div>
+  <div class="capture-actions" style="margin-top:8px">
+    <button style="border-color:#fbbf24;color:#fbbf24" onclick="startUpload('card')">📤 Upload Card</button>
+    <button style="border-color:#fbbf24;color:#fbbf24" onclick="startUpload('flyer')">📤 Upload Flyer</button>
+    <button class="btn-note" onclick="startCapture('note')">📝 Note</button>
   </div>
 </div>
 
@@ -246,6 +250,28 @@ function startCapture(type){
   };
   
   // Small delay for iOS
+  setTimeout(() => fresh.click(), 100);
+}
+
+function startUpload(type){
+  captureType = type;
+  captureImage = '';
+  
+  const existing = document.getElementById('galleryInput');
+  const fresh = existing.cloneNode(true);
+  existing.parentNode.replaceChild(fresh, existing);
+  
+  fresh.onchange = function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      captureImage = ev.target.result;
+      openModal(type, captureImage);
+    };
+    reader.readAsDataURL(file);
+  };
+  
   setTimeout(() => fresh.click(), 100);
 }
 
